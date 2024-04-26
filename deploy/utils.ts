@@ -6,6 +6,7 @@ import { ethers } from "ethers";
 
 import "@matterlabs/hardhat-zksync-node/dist/type-extensions";
 import "@matterlabs/hardhat-zksync-verify/dist/src/type-extensions";
+import fs from "fs";
 
 // Load env file
 dotenv.config();
@@ -70,7 +71,8 @@ type DeployContractOptions = {
    */
   wallet?: Wallet
 }
-export const deployContract = async (contractArtifactName: string, constructorArguments?: any[], options?: DeployContractOptions) => {
+export const testDeployContract =  async (contractArtifactName: string,  constructorArguments?: any[], options?: DeployContractOptions) => {
+
   const log = (message: string) => {
     if (!options?.silent) console.log(message);
   }
@@ -106,7 +108,6 @@ export const deployContract = async (contractArtifactName: string, constructorAr
   log(` - Contract address: ${address}`);
   log(` - Contract source: ${fullContractSource}`);
   log(` - Encoded constructor arguments: ${constructorArgs}\n`);
-
   if (!options?.noVerify && hre.network.config.verifyURL) {
     log(`Requesting contract verification...`);
     await verifyContract({
@@ -119,6 +120,87 @@ export const deployContract = async (contractArtifactName: string, constructorAr
 
   return contract;
 }
+export const deployContract = async (contractArtifactName: string, deploymentState: any, constructorArguments?: any[], options?: DeployContractOptions) => {
+  if(deploymentState[contractArtifactName] != undefined){
+    console.log(contractArtifactName, "has already been deployed");
+    const contractArtifact = await hre.artifacts.readArtifact(contractArtifactName);
+    return  new ethers.Contract(
+        deploymentState[contractArtifactName].address,
+        contractArtifact.abi,
+        getWallet() // Interact with the contract on behalf of this wallet
+    );
+  }
+  const log = (message: string) => {
+    if (!options?.silent) console.log(message);
+  }
+
+  log(`\nStarting deployment process of "${contractArtifactName}"...`);
+
+  const wallet = options?.wallet ?? getWallet();
+  const deployer = new Deployer(hre, wallet);
+  const artifact = await deployer.loadArtifact(contractArtifactName).catch((error) => {
+    if (error?.message?.includes(`Artifact for contract "${contractArtifactName}" not found.`)) {
+      console.error(error.message);
+      throw `⛔️ Please make sure you have compiled your contracts or specified the correct contract name!`;
+    } else {
+      throw error;
+    }
+  });
+
+  // Estimate contract deployment fee
+  const deploymentFee = await deployer.estimateDeployFee(artifact, constructorArguments || []);
+  log(`Estimated deployment cost: ${ethers.formatEther(deploymentFee)} ETH`);
+
+  // Check if the wallet has enough balance
+  await verifyEnoughBalance(wallet, deploymentFee);
+
+  // Deploy the contract to zkSync
+  const contract = await deployer.deploy(artifact, constructorArguments);
+  const address = await contract.getAddress();
+  const constructorArgs = contract.interface.encodeDeploy(constructorArguments);
+  const fullContractSource = `${artifact.sourceName}:${artifact.contractName}`;
+
+  // Display contract deployment info
+  log(`\n"${artifact.contractName}" was successfully deployed:`);
+  log(` - Contract address: ${address}`);
+  log(` - Contract source: ${fullContractSource}`);
+  log(` - Encoded constructor arguments: ${constructorArgs}\n`);
+  deploymentState[contractArtifactName] = {
+    name: contractArtifactName,
+    address:  address
+  }
+  saveDeployment(deploymentState);
+  if (!options?.noVerify && hre.network.config.verifyURL) {
+    log(`Requesting contract verification...`);
+    await verifyContract({
+      address,
+      contract: fullContractSource,
+      constructorArguments: constructorArgs,
+      bytecode: artifact.bytecode,
+    });
+  }
+
+  return contract;
+}
+function saveDeployment(deploymentState: any) {
+  const deploymentStateJSON = JSON.stringify(deploymentState, null, 2);
+  fs.writeFileSync("./DeploymentOutput.json", deploymentStateJSON);
+}
+
+export function loadPreviousDeployment() {
+  let previousDeployment = {};
+  if (fs.existsSync("./DeploymentOutput.json")) {
+    console.log(`Loading previous deployment...`);
+    previousDeployment = require( "../DeploymentOutput.json");
+    console.log(previousDeployment);
+  }
+  return previousDeployment;
+}
+
+
+
+
+
 
 /**
  * Rich wallets can be used for testing purposes.

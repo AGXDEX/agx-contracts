@@ -1,0 +1,18 @@
+{
+  "Vault": {
+    "name": "Vault",
+    "address": "0xEFa3C5622DB292EB345320f4D650D9d77b865386"
+  },
+  "USDG": {
+    "name": "USDG",
+    "address": "0xb14F8c54644cc7774548af1a8176eebD23d192AA"
+  },
+  "Router": {
+    "name": "Router",
+    "address": "0x84C031d394aA04A70Af920036D230d374685d19A"
+  },
+  "VaultPriceFeed": {
+    "name": "VaultPriceFeed",
+    "address": "0x733b40FB2269183777e813f67Ef443CeA3c90791"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "pufETH": {
+    "tokenAddress": "0xe7983094d8865bBCc891ECe5d28a584A3bE6C601",
+    "priceFeed": "0x11d206FE456F0E166145D55B09076f6824e6C352"
+  },
+  "ezETH": {
+    "tokenAddress": "0xF3eAc5A68B39FFC402799C240ced3eF3Ce6Df290",
+    "priceFeed": "0x54c50C015C9150e4f137891b280B9352d0f88127"
+  },
+  "ETH": {
+    "tokenAddress": "0x209Ed3D0003ED1EAd9617463E993e09092405233",
+    "priceFeed": "0xB220681Aa6912907c52f378A3158B4d4977FF115"
+  },
+  "WBTC": {
+    "tokenAddress": "0x184D5ae2C1815BaAeAE56BbC1C272F4E09b97765",
+    "priceFeed": "0x72A888E65371Fd74460d3a137369f4582dAd698A"
+  }
+}

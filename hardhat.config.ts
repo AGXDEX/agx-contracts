@@ -38,6 +38,12 @@ const config: HardhatUserConfig = {
       zksync: true,
     },
     novaSepolia:{
+      url: "https://sepolia.rpc.zklink.io",
+      ethNetwork: "sepolia",
+      zksync: true,
+      accounts:[PRIVATE_KEY]
+    },
+    nova:{
       url: "https://rpc.zklink.io",
       ethNetwork: "mainnet",
       zksync: true,
@@ -54,7 +60,7 @@ const config: HardhatUserConfig = {
       // https://era.zksync.io/docs/tools/hardhat/hardhat-zksync-solc.html#configuration
         libraries: {
               "contracts/core/PositionUtils.sol": {
-                "PositionUtils": "0xb2C8Af5100AFcdF53AE5e8a878EC14c1F854CEE8"
+                "PositionUtils": "0xBE692936366DD23EDd63204EfDAeEc34d6a02370"
               }
             }
     },
