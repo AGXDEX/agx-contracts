@@ -2,6 +2,7 @@ import {deployContract, getWallet, loadPreviousDeployment} from "./utils";
 import * as config from "../config";
 import "ethers";
 import {ethers} from "ethers";
+import  tokenConfig from "../pricefeed.json";
 // An example of a basic deploy script
 // It will deploy a Greeter contract to selected network
 // as well as verify it on Block Explorer if possible for the network
@@ -21,13 +22,16 @@ async function main() {
   //pricefeed
   const vaultPriceFeed = await deployContract("VaultPriceFeed",deploymentState);
 
+    if(await vaultPriceFeed.maxStrictPriceDeviation() ==  0 ){
+        const setMaxStrictPriceDeviation = await vaultPriceFeed.setMaxStrictPriceDeviation( 10n ** 28n);
+        await setMaxStrictPriceDeviation.wait();
+    }
 
-  const setMaxStrictPriceDeviation = await vaultPriceFeed.setMaxStrictPriceDeviation( 10n ** 28n);
-  await setMaxStrictPriceDeviation.wait();
 
 
     const setPriceSampleSpace = await vaultPriceFeed.setPriceSampleSpace(1);
     await setPriceSampleSpace.wait();
+
 
     const setIsAmmEnabled = await vaultPriceFeed.setIsAmmEnabled(false);
     await setIsAmmEnabled.wait();
@@ -39,7 +43,6 @@ async function main() {
     await setInPrivateTransferMode.wait();
 
     const shortsTracker = await deployContract("ShortsTracker", deploymentState,[await vault.getAddress()] );
-    await shortsTracker.waitForDeployment();
 
     const setIsGlobalShortDataReady = await shortsTracker.setIsGlobalShortDataReady(true);
     await setIsGlobalShortDataReady.wait();
@@ -64,19 +67,25 @@ async function main() {
     const usdgAddVault = await usdg.addVault(await glpManager.getAddress());
     await usdgAddVault.wait();
 
-    const vaultInit = await vault.initialize(
-        await router.getAddress(),
-        await usdg.getAddress(),
-        await vaultPriceFeed.getAddress(),
-        (2n * 10n ** 10n) * (10n ** 20n),
-        100,// fundingRateFactor
-        100// stableFundingRateFactor
-    )
-    await vaultInit.wait();
+
+    if(await vault.isInitialized() != true){
+        const vaultInit = await vault.initialize(
+            await router.getAddress(),
+            await usdg.getAddress(),
+            await vaultPriceFeed.getAddress(),
+            (2n * 10n ** 10n) * (10n ** 20n),
+            100,// fundingRateFactor
+            100// stableFundingRateFactor
+        )
+        await vaultInit.wait();
+    }
 
 
-    const setFundingRate = await vault.setFundingRate(60 * 60, 100, 100);
-    await setFundingRate.wait();
+    if(await vault.fundingRateFactor() == 0 ){
+        const setFundingRate = await vault.setFundingRate(60 * 60, 100, 100);
+        await setFundingRate.wait();
+    }
+
 
     const setInManagerMode = await vault.setInManagerMode(true);
     await setInManagerMode.wait();
@@ -107,24 +116,29 @@ async function main() {
 
     const vaultUtils = await deployContract("VaultUtils", deploymentState, [await vault.getAddress()]);
 
-    const setVaultUtils = await vault.setVaultUtils(await vaultUtils.getAddress());
-    await setVaultUtils.wait();
+
+    if(await vault.vaultUtils() == ethers.ZeroAddress){
+        const setVaultUtils = await vault.setVaultUtils(await vaultUtils.getAddress());
+        await setVaultUtils.wait();
+    }
 
 
 
-    const mockToken = await deployContract("MockToken", deploymentState);
+
+
+
 
 
      const setPriceFeed = await vaultPriceFeed.setTokenConfig(
-         await mockToken.getAddress(),
-         config.ETH_ORACLE,
+         tokenConfig.pufETH.tokenAddress,
+         tokenConfig.pufETH.priceFeed,
          8,
          false
      );
      await setPriceFeed.wait();
 
      const setTokenConfig = await vault.setTokenConfig(
-         await mockToken.getAddress(),
+        tokenConfig.pufETH.tokenAddress,
          18,
          10000,
          75,
@@ -134,11 +148,11 @@ async function main() {
      );
      await setTokenConfig.wait();
 
-     console.log("approve")
+    /* console.log("approve")
      const mint = await mockToken.mint(signer.address, ethers.parseEther("100000000"));
      await mint.wait();
      const  approve = await mockToken.approve(await glpManager.getAddress(), ethers.parseEther("1000000"));
-     await approve.wait();
+     await approve.wait();*/
 
 
      const gmx = await deployContract("GMX", deploymentState) ;
@@ -171,6 +185,7 @@ async function main() {
      console.log("set Token interval success")
 
 
+/*
 
 
      const  addLiquidity = await glpManager.addLiquidity(await mockToken.getAddress(), ethers.parseEther('1000'), 0, 0);
@@ -196,6 +211,8 @@ async function main() {
 
 
 
+
+*/
 
 
 
