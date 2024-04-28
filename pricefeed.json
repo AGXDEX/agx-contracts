@@ -1,18 +1,50 @@
 {
   "pufETH": {
-    "tokenAddress": "0xe7983094d8865bBCc891ECe5d28a584A3bE6C601",
-    "priceFeed": "0x11d206FE456F0E166145D55B09076f6824e6C352"
+    "tokenAddress": "0xE64F021d74D8803D4315696dD60E9C4213E75394",
+    "priceFeed": "0x01a743179508717DcD44c77FCC19f612a7584183",
+    "isStrictStable": false,
+    "tokenWeight": 10000,
+    "maxUsdgAmount": 30000000,
+    "isShortable": true
   },
   "ezETH": {
-    "tokenAddress": "0xF3eAc5A68B39FFC402799C240ced3eF3Ce6Df290",
-    "priceFeed": "0x54c50C015C9150e4f137891b280B9352d0f88127"
+    "tokenAddress": "0xbEC6Aa5DB3E6A2Ff9865cea3f6f4CF0D9c434Da6",
+    "priceFeed": "0x6Ab65395d06b7f8B1c6e00c1fA5f319424F24a7d",
+    "isStrictStable": false,
+    "tokenWeight": 10000,
+    "maxUsdgAmount": 30000000,
+    "isShortable": true
   },
   "ETH": {
-    "tokenAddress": "0x209Ed3D0003ED1EAd9617463E993e09092405233",
-    "priceFeed": "0xB220681Aa6912907c52f378A3158B4d4977FF115"
+    "tokenAddress": "0x5bfbF217Fb73474319fC48aD355e79d91E69eedE",
+    "priceFeed": "0x1506A46f60D759EB558c5909e6c74E1aEB7b5d09",
+    "isStrictStable": false,
+    "tokenWeight": 10000,
+    "maxUsdgAmount": 30000000,
+    "isShortable": true
   },
   "WBTC": {
-    "tokenAddress": "0x184D5ae2C1815BaAeAE56BbC1C272F4E09b97765",
-    "priceFeed": "0x72A888E65371Fd74460d3a137369f4582dAd698A"
+    "tokenAddress": "0x45d4A0E4467484d46E00b57475fe8d4394236A81",
+    "priceFeed": "0xcc386155f1385393cDfa5F6AE3268E56E80EDF1d",
+    "isStrictStable": false,
+    "tokenWeight": 10000,
+    "maxUsdgAmount": 30000000,
+    "isShortable": true
+  },
+  "usdt": {
+    "tokenAddress": "0x751Da73C410A0A0f64C143057bC5B36cfC8Ebd30",
+    "priceFeed": "0xB46A73aa17D22f70eD168d22165a8D4DA337da88",
+    "isStrictStable": true,
+    "tokenWeight": 10000,
+    "maxUsdgAmount": 30000000,
+    "isShortable": false
+  },
+  "usdc": {
+    "tokenAddress": "0xD8824ca60F391aeFD38252968B67048FE8B91623",
+    "priceFeed": "0x34EBE1cE1f9a445a72dD8139c4f72a353e00090D",
+    "isStrictStable": true,
+    "tokenWeight": 10000,
+    "maxUsdgAmount": 30000000,
+    "isShortable": false
   }
 }

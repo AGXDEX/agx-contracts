@@ -122,13 +122,6 @@ async function main() {
         await setVaultUtils.wait();
     }
 
-
-
-
-
-
-
-
      const setPriceFeed = await vaultPriceFeed.setTokenConfig(
          tokenConfig.pufETH.tokenAddress,
          tokenConfig.pufETH.priceFeed,
@@ -148,11 +141,6 @@ async function main() {
      );
      await setTokenConfig.wait();
 
-    /* console.log("approve")
-     const mint = await mockToken.mint(signer.address, ethers.parseEther("100000000"));
-     await mint.wait();
-     const  approve = await mockToken.approve(await glpManager.getAddress(), ethers.parseEther("1000000"));
-     await approve.wait();*/
 
 
      const gmx = await deployContract("GMX", deploymentState) ;

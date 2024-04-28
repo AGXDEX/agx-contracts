@@ -1,50 +1,50 @@
 {
   "Vault": {
     "name": "Vault",
-    "address": "0xCa5A466202d96BD63D464138E22BD8d9FD3f2F2C"
+    "address": "0xEd71AaE15ab573BF8a4197D8Cd9e75Ac2f690034"
   },
   "USDG": {
     "name": "USDG",
-    "address": "0xE4152b2950Ef652daC9FDfAE61665Af40a13C623"
+    "address": "0xF4874552661C8B1d6a82Fd9796112a0BB378aF77"
   },
   "Router": {
     "name": "Router",
-    "address": "0x1423c508480dDB4A8842b20f22d4262Ea30e97bA"
+    "address": "0x29e89F35caA734Dc15A45E8A905f1c2E332bF834"
   },
   "VaultPriceFeed": {
     "name": "VaultPriceFeed",
-    "address": "0xf9cAC31432a4D4632914d0610e82EFf894812332"
+    "address": "0xA43668cdd776393D54504290198c652C9F5Fb52f"
   },
   "GLP": {
     "name": "GLP",
-    "address": "0x75a54D7FeF804dA27f23a35e4Ffd7AE57Fa961A2"
+    "address": "0x5412CE4652bf20bc8ea0a246ffDB015624f26FE5"
   },
   "ShortsTracker": {
     "name": "ShortsTracker",
-    "address": "0xeDb66afa3696cA2c79aca3bB56562bAB7B7cA742"
+    "address": "0x8B7a78D33E6D8Bd687F8DbeFB7809442461F34Bd"
   },
   "GlpManager": {
     "name": "GlpManager",
-    "address": "0x5570b5beF4D7433eE9DE628EC11779B4773be485"
+    "address": "0x5b7a2484C003FdCd8b1381C302f210B607a963ec"
   },
   "VaultErrorController": {
     "name": "VaultErrorController",
-    "address": "0x211d829dFb56eA58525f9A7A3aa233C88CBf72d7"
+    "address": "0x4cE8d90e4B336e9a1CC276cf0D8A22B48289dF37"
   },
   "VaultUtils": {
     "name": "VaultUtils",
-    "address": "0x58f5806f92deF9078A8e640bF620C56708E275fD"
+    "address": "0x04059eeb9Ad317E57D28e3839cA865b66A7100c4"
   },
   "GMX": {
     "name": "GMX",
-    "address": "0xe2c1860f50a6E4E8515d32BA93ec3aee5B7F5681"
+    "address": "0x753d36F7136e191A2746FB0643da3D79cFf14C1b"
   },
   "YieldTracker": {
     "name": "YieldTracker",
-    "address": "0x3699fFBb5d435f59084C7fED0C22C75C6Aa90178"
+    "address": "0xD81DE255B98B9C8160dA489d1c282430BA34e76C"
   },
   "TimeDistributor": {
     "name": "TimeDistributor",
-    "address": "0x63C26A4371D4d982fA741CCB707e1156d22aFd79"
+    "address": "0x992A8042159fEe73C2b7B730AA9c82eea8712ACB"
   }
 }

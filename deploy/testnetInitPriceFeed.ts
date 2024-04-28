@@ -12,13 +12,23 @@ async function main() {
     const deployer = new Deployer(hre, wallet);
 
         for (const key in tokenConfig) {
+            const mockTokenArtifact = await hre.artifacts.readArtifact("MockToken");
+            const mockToken = new ethers.Contract(
+                tokenConfig[key].tokenAddress,
+                mockTokenArtifact.abi,
+                getWallet()
+            )
+            const mint = await mockToken.mint(wallet.address, ethers.parseEther('10000000'));
+            await mint.wait();
+
             const priceFeedArtifact = await hre.artifacts.readArtifact("PriceFeed");
             const priceFeed = new ethers.Contract(
                 tokenConfig[key].priceFeed,
                 priceFeedArtifact.abi,
                 getWallet()
             )
-            const setAnswer = await priceFeed.setLatestAnswer(ethers.parseEther('0.001'));
+            let answer = key === "usdt"??'usdc' ?  10 ** 8: 3000 * 10 ** 8;
+            const setAnswer = await priceFeed.setLatestAnswer(answer);
             await setAnswer.wait();
         console.log("set answer success");
     }
