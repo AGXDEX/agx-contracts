@@ -46,5 +46,9 @@
   "TimeDistributor": {
     "name": "TimeDistributor",
     "address": "0x992A8042159fEe73C2b7B730AA9c82eea8712ACB"
+  },
+  "RewardRouter": {
+    "name": "RewardRouter",
+    "address": "0x32450587214Ee29F4177784E888E949054ffACAB"
   }
 }

@@ -59,6 +59,5 @@ export const ERRORS = [
     "Vault: maxGasPrice exceeded"
 ]
 
-export const ETH_ORACLE = "0xd30e2101a97dcbAeBCBC04F14C3f624E67A35165"
-
+export const WETH = "0x8280a4e7D5B3B658ec4580d3Bc30f5e50454F169";
 export const COOL_DOWN_DURATION = 0;

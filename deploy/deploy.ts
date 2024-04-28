@@ -3,6 +3,7 @@ import * as config from "../config";
 import "ethers";
 import {ethers} from "ethers";
 import  tokenConfig from "../pricefeed.json";
+import * as readline from "readline";
 // An example of a basic deploy script
 // It will deploy a Greeter contract to selected network
 // as well as verify it on Block Explorer if possible for the network
@@ -122,24 +123,6 @@ async function main() {
         await setVaultUtils.wait();
     }
 
-     const setPriceFeed = await vaultPriceFeed.setTokenConfig(
-         tokenConfig.pufETH.tokenAddress,
-         tokenConfig.pufETH.priceFeed,
-         8,
-         false
-     );
-     await setPriceFeed.wait();
-
-     const setTokenConfig = await vault.setTokenConfig(
-        tokenConfig.pufETH.tokenAddress,
-         18,
-         10000,
-         75,
-         0,
-         false,
-         true
-     );
-     await setTokenConfig.wait();
 
 
 
@@ -151,7 +134,7 @@ async function main() {
 
 
 
-     const yieldTracker = await deployContract("YieldTracker",deploymentState,[ await glp.getAddress()]) ;
+   /*  const yieldTracker = await deployContract("YieldTracker",deploymentState,[ await glp.getAddress()]) ;
 
      const glpSetTracker = await glp.setYieldTrackers([await yieldTracker.getAddress()]);
      await glpSetTracker.wait();
@@ -170,9 +153,18 @@ async function main() {
      await gmxmint.wait();
      const setTokenPerInterval = await rewardDistributor.setTokensPerInterval(await yieldTracker.getAddress(), ethers.parseEther('1'));
      await setTokenPerInterval.wait();
-     console.log("set Token interval success")
+     console.log("set Token interval success")*/
 
+    const rewardRouter = await deployContract("RewardRouter", deploymentState);
+    const rewardRouterInit = await rewardRouter.initialize(
+        config.WETH,
+        await gmx.getAddress(),
+        await glp.getAddress(),
+        await glpManager.getAddress()
+    );
 
+     const vaultSetHandler = await glpManager.setHandler(await rewardRouter.getAddress(), true);
+     await vaultSetHandler.wait();
 /*
 
 
