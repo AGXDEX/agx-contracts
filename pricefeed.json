@@ -15,8 +15,8 @@
     "maxUsdgAmount": 30000000,
     "isShortable": true
   },
-  "ETH": {
-    "tokenAddress": "0x5bfbF217Fb73474319fC48aD355e79d91E69eedE",
+  "WETH": {
+    "tokenAddress": "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1",
     "priceFeed": "0x1506A46f60D759EB558c5909e6c74E1aEB7b5d09",
     "isStrictStable": false,
     "tokenWeight": 10000,

@@ -50,5 +50,13 @@
   "RewardRouter": {
     "name": "RewardRouter",
     "address": "0x32450587214Ee29F4177784E888E949054ffACAB"
+  },
+  "Reader": {
+    "name": "Reader",
+    "address": "0x910A8594998e4129eE896C610372277f5b5f3BB4"
+  },
+  "VaultReader": {
+    "name": "VaultReader",
+    "address": "0x78B36F899Af4717bFf5f7F3d3ac18724108c756E"
   }
 }

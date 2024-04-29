@@ -18,7 +18,7 @@ async function main() {
   const usdg = await deployContract("USDG",deploymentState, [await vault.getAddress()]);
 
   //router
-  const router = await deployContract("Router", deploymentState,[await vault.getAddress(), await usdg.getAddress(), config.WETH_ADDRESS] );
+  const router = await deployContract("Router", deploymentState,[await vault.getAddress(), await usdg.getAddress(), config.WETH] );
 
   //pricefeed
   const vaultPriceFeed = await deployContract("VaultPriceFeed",deploymentState);
@@ -134,7 +134,7 @@ async function main() {
 
 
 
-   /*  const yieldTracker = await deployContract("YieldTracker",deploymentState,[ await glp.getAddress()]) ;
+     const yieldTracker = await deployContract("YieldTracker",deploymentState,[ await glp.getAddress()]) ;
 
      const glpSetTracker = await glp.setYieldTrackers([await yieldTracker.getAddress()]);
      await glpSetTracker.wait();
@@ -153,8 +153,7 @@ async function main() {
      await gmxmint.wait();
      const setTokenPerInterval = await rewardDistributor.setTokensPerInterval(await yieldTracker.getAddress(), ethers.parseEther('1'));
      await setTokenPerInterval.wait();
-     console.log("set Token interval success")*/
-
+     console.log("set Token interval success")
     const rewardRouter = await deployContract("RewardRouter", deploymentState);
     const rewardRouterInit = await rewardRouter.initialize(
         config.WETH,
@@ -162,9 +161,14 @@ async function main() {
         await glp.getAddress(),
         await glpManager.getAddress()
     );
+    await rewardRouterInit.wait();
 
      const vaultSetHandler = await glpManager.setHandler(await rewardRouter.getAddress(), true);
      await vaultSetHandler.wait();
+
+    const reader = await  deployContract("Reader", deploymentState);
+    const vaultReader = await  deployContract("VaultReader", deploymentState);
+
 /*
 
 

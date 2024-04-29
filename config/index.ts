@@ -1,4 +1,3 @@
-export const WETH_ADDRESS = "0x980B62Da83eFf3D4576C647993b0c1D7faf17c73";
 
 export const ERRORS = [
     "Vault: zero error",
@@ -59,5 +58,5 @@ export const ERRORS = [
     "Vault: maxGasPrice exceeded"
 ]
 
-export const WETH = "0x8280a4e7D5B3B658ec4580d3Bc30f5e50454F169";
+export const WETH = "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1";
 export const COOL_DOWN_DURATION = 0;
