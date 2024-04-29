@@ -22,16 +22,16 @@ async function main() {
     const res = await priceFeed.getVaultTokenInfoV4(
         ContractAddresses.Vault.address,
         ethers.ZeroAddress,
-        ethers.ZeroAddress,
+        "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1",
         ethers.parseEther('1'),
         [
             '0x0000000000000000000000000000000000000000',
-            '0x45d4A0E4467484d46E00b57475fe8d4394236A81',
+            '0xd7Da924AB56b87e7C1B1933c84992053FD824eA1',
             '0xE64F021d74D8803D4315696dD60E9C4213E75394',
             '0xbEC6Aa5DB3E6A2Ff9865cea3f6f4CF0D9c434Da6',
             '0x751Da73C410A0A0f64C143057bC5B36cfC8Ebd30',
-            '0xD8824ca60F391aeFD38252968B67048FE8B91623']
-
+            '0xD8824ca60F391aeFD38252968B67048FE8B91623'
+        ]
         )
     console.log(res)
 
