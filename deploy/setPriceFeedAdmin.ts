@@ -22,12 +22,11 @@ async function main() {
             priceFeedArtifact.abi,
             getWallet()
         );
-/*
-        const setAdmin = await priceFeed.setAdmin("0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90", true);
+        const setAdmin = await priceFeed.setAdmin(price[key].admin, true);
         await setAdmin.wait();
-        console.log("set admin success");*/
+        console.log("set admin success");
 
-        console.log(await priceFeed.latestAnswer());
+        //console.log(await priceFeed.latestAnswer());
     }
 
 
