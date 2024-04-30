@@ -10,7 +10,8 @@
     "interact": "hardhat deploy-zksync --script interact.ts",
     "compile": "hardhat compile",
     "clean": "hardhat clean",
-    "test": "hardhat test --network hardhat"
+    "test": "hardhat test --network hardhat",
+    "run:priceFeed": "ts-node priceFeedService/priceFeed.service.ts"
   },
   "devDependencies": {
     "@matterlabs/hardhat-zksync": "^1.0.0",

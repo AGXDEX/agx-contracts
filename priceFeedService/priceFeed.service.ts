@@ -1,7 +1,6 @@
 import { PriceServiceConnection } from "@pythnetwork/price-service-client";
 import { PriceFeed__factory, PriceFeed } from "../typechain";
 import { BigNumber } from "@ethersproject/bignumber";
-// import { TransactionRequest } from '@ethersproject/abstract-provider';
 import { Wallet, Provider, types } from "zksync-ethers";
 import dotenv from 'dotenv';
 // Load env file
@@ -88,6 +87,10 @@ async function updatePrice() {
         const promptPrice = price.price;
         const promptUpdate = price.publishTime;
 
+        console.log(
+            `Price for ${priceConfig.symbal} is ${promptPrice} at ${new Date(promptUpdate * 1000).toISOString()}`
+        );
+
         let isShouldUpdate: boolean = false;
         if (priceConfig.lastPrice && priceConfig.lastUpdate) {
             const timeElapsed = promptUpdate - priceConfig.lastUpdate;
@@ -112,6 +115,8 @@ async function updatePrice() {
             priceConfig.lastPrice = BigNumber.from(promptPrice);
             priceConfig.lastUpdate = promptUpdate;
             priceFeedConfigs.set(priceFeed.id, priceConfig);
+            console.log(`Setting latest answer for ${priceConfig.priceFeed} to ${promptPrice}.`);
+
         }
     }
 }
@@ -128,7 +133,6 @@ async function setLatestAnswer(walletPK: string, priceFeedAddress: string, promp
         isTxSuccess = replaceResult.isTxSuccess;
         txHash = replaceResult.txHash;
     }
-    console.log(`Setting latest answer for ${priceFeedAddress} to ${promptPrice} succeeds and the tx hash: ${txHash}`);
 }
 
 async function checkTxReceipt(txHash: string): Promise<boolean> {
