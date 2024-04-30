@@ -36,7 +36,7 @@ async function main() {
         console.log('vaultPricefeed config')
         const vaultSetConfig = await vault.setTokenConfig(
             price[key].tokenAddress,
-            18,
+            price[key].decimals,
             price[key].tokenWeight,
             0,
             ethers.parseEther(`${price[key].maxUsdgAmount}`),
