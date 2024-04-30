@@ -1,20 +1,22 @@
 {
   "pufETH": {
-    "tokenAddress": "0xE64F021d74D8803D4315696dD60E9C4213E75394",
+    "tokenAddress": "0x1569046dC6D4bd5d06cA5fa2fb83D2885bd87b20",
     "priceFeed": "0x01a743179508717DcD44c77FCC19f612a7584183",
     "isStrictStable": false,
     "tokenWeight": 10000,
     "maxUsdgAmount": 500000,
     "isShortable": true,
+    "decimals": 18,
     "admin": "0xc6e19A91Cf79A532DF2a6088334a146656CcCAA5"
   },
   "ezETH": {
-    "tokenAddress": "0xbEC6Aa5DB3E6A2Ff9865cea3f6f4CF0D9c434Da6",
+    "tokenAddress": "0xD7C43Ef14bb17C8bBD6575992aa35d9EBBfc512D",
     "priceFeed": "0x6Ab65395d06b7f8B1c6e00c1fA5f319424F24a7d",
     "isStrictStable": false,
     "tokenWeight": 10000,
     "maxUsdgAmount": 500000,
     "isShortable": true,
+    "decimals": 18,
     "admin": "0x18933E5eb504b82e668a95adfdd493D38243C5a1"
   },
   "WETH": {
@@ -24,33 +26,37 @@
     "tokenWeight": 15000,
     "maxUsdgAmount": 750000,
     "isShortable": true,
+    "decimals": 18,
     "admin": "0x4B840868eA1092548Df1BDcc051147ff02282b50"
   },
   "WBTC": {
-    "tokenAddress": "0x45d4A0E4467484d46E00b57475fe8d4394236A81",
+    "tokenAddress": "0xbEacb61e11940e38EAdCf41860b9ea31E2a90deC",
     "priceFeed": "0xcc386155f1385393cDfa5F6AE3268E56E80EDF1d",
     "isStrictStable": false,
     "tokenWeight": 15000,
     "maxUsdgAmount": 750000,
     "isShortable": true,
+    "decimals": 8,
     "admin": "0xAe7160A86201AbeB6de0925693aF6E5a77d1871a"
   },
   "usdt": {
-    "tokenAddress": "0x751Da73C410A0A0f64C143057bC5B36cfC8Ebd30",
+    "tokenAddress": "0x773646397e21C0B4a323f7FdB98B6c45F5Df5A65",
     "priceFeed": "0xB46A73aa17D22f70eD168d22165a8D4DA337da88",
     "isStrictStable": true,
     "tokenWeight": 24000,
     "maxUsdgAmount": 2500000,
     "isShortable": false,
+    "decimals": 6,
     "admin": "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
   },
   "usdc": {
-    "tokenAddress": "0xD8824ca60F391aeFD38252968B67048FE8B91623",
+    "tokenAddress": "0x0A8714d8fc4bE1b8f2B2AB29b8e4fEe9B271a57D",
     "priceFeed": "0x34EBE1cE1f9a445a72dD8139c4f72a353e00090D",
     "isStrictStable": true,
     "tokenWeight": 25000,
     "maxUsdgAmount": 2500000,
     "isShortable": false,
+    "decimals": 6,
     "admin": "0x0e34d5003f4448c135Ef17B7d7b15089fD57ed89"
   }
 }

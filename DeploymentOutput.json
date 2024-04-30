@@ -1,62 +1,62 @@
 {
   "Vault": {
     "name": "Vault",
-    "address": "0x603718061355Eb3a1767372d9E3C50337B179441"
+    "address": "0xaC8B9dF674503FbC42564D97d6fb46b2F70310d9"
   },
   "USDG": {
     "name": "USDG",
-    "address": "0xB8F0ea8e5B7FcA03eFeff6C3961dFC6D40fb504B"
+    "address": "0x0B1114f8680E8026bbF5f29FBDd8134446e8e23D"
   },
   "Router": {
     "name": "Router",
-    "address": "0xf04cFB340A5776F32279Acc46E856177Cc48a15B"
+    "address": "0x23DDA0c19Fb812a288a3eDBdA883B76110005703"
   },
   "VaultPriceFeed": {
     "name": "VaultPriceFeed",
-    "address": "0x6f08F760A11239c9B228DA1661076d25923F25CC"
+    "address": "0x080006f418c3a0d59E55fb22CA20870353cf6EA9"
   },
-  "GLP": {
-    "name": "GLP",
-    "address": "0x23e415d545e93d1928b95fD654443CeDf84a96B1"
+  "ALP": {
+    "name": "ALP",
+    "address": "0x05eaf45C30679C174013439A7fd6836723c7b33c"
   },
   "ShortsTracker": {
     "name": "ShortsTracker",
-    "address": "0x8F1Ec0FF410eF7A0Bc7905d8B9aE3Ea5Fa21408a"
+    "address": "0x10541b175d7b39E6Ff5cEDE390656824aB719981"
   },
   "GlpManager": {
     "name": "GlpManager",
-    "address": "0x0DBC36aDcB5AfaD174EEFEfa33B64679d7C78A2E"
+    "address": "0xe8906D3Eba925FcabB1D029E002db46910A433b3"
   },
   "VaultErrorController": {
     "name": "VaultErrorController",
-    "address": "0x174Fe249e0389e21187b69C2bc6A1B6eF116A430"
+    "address": "0xfC5411A0FfcCa358e524cd1a591731A17554dcc1"
   },
   "VaultUtils": {
     "name": "VaultUtils",
-    "address": "0x2D94AEFB1Fb0122A37713eD43502c8a4a8b9D258"
+    "address": "0x6bB18FAb2A3F5eE3b2BaC52F96D95cC3A39e710D"
   },
-  "GMX": {
-    "name": "GMX",
-    "address": "0xef7b8eba7228c922A7fFD7A5C311374ea0A8a9d0"
+  "AGX": {
+    "name": "AGX",
+    "address": "0x89Ed224f358444f10C7B86dB172a69b45678fCDC"
   },
   "YieldTracker": {
     "name": "YieldTracker",
-    "address": "0x488444B69e1b53355612502e10db3fb97713b0A7"
+    "address": "0xb617F56C41cB9963226aD4596d4b966181Ec430b"
   },
   "TimeDistributor": {
     "name": "TimeDistributor",
-    "address": "0xa1347C3d6C1381E19e386857aE9627b57523256B"
+    "address": "0xa63ca444Fb3deFe007a4f4925b8122eDA643f6F6"
   },
   "RewardRouter": {
     "name": "RewardRouter",
-    "address": "0xC429F3eBa8c8b3000385d166872C2cd950f772c2"
+    "address": "0x2254B093F3D2345A534738780BbeD268dEd46222"
   },
   "Reader": {
     "name": "Reader",
-    "address": "0x253efeDB340453eE11590ebb914d9C306278e827"
+    "address": "0x21bCF00465DB4513C08FA1d6417004B04b8d4625"
   },
   "VaultReader": {
     "name": "VaultReader",
-    "address": "0x9eD7E093C76d45cb0d26A19a4d470B6d470236f5"
+    "address": "0xbdFd584Dcc9dc6224DA52fb4E10d0792E84dA497"
   }
 }

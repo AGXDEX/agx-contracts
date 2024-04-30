@@ -12,7 +12,7 @@ async function main() {
     for (const key in price) {
         if(price[key].tokenAddress == ''){
             //deploy mockToken
-             const mockToken = await testDeployContract("MockToken", [key, key]);
+             const mockToken = await testDeployContract("MockToken", [key, key, price[key].decimals]);
             price[key].tokenAddress = await mockToken.getAddress();
         }
         if(price[key].priceFeed == ''){
