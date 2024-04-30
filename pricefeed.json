@@ -4,7 +4,7 @@
     "priceFeed": "0x01a743179508717DcD44c77FCC19f612a7584183",
     "isStrictStable": false,
     "tokenWeight": 10000,
-    "maxUsdgAmount": 30000000,
+    "maxUsdgAmount": 500000,
     "isShortable": true,
     "admin": "0xc6e19A91Cf79A532DF2a6088334a146656CcCAA5"
   },
@@ -13,7 +13,7 @@
     "priceFeed": "0x6Ab65395d06b7f8B1c6e00c1fA5f319424F24a7d",
     "isStrictStable": false,
     "tokenWeight": 10000,
-    "maxUsdgAmount": 30000000,
+    "maxUsdgAmount": 500000,
     "isShortable": true,
     "admin": "0x18933E5eb504b82e668a95adfdd493D38243C5a1"
   },
@@ -21,8 +21,8 @@
     "tokenAddress": "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1",
     "priceFeed": "0x1506A46f60D759EB558c5909e6c74E1aEB7b5d09",
     "isStrictStable": false,
-    "tokenWeight": 10000,
-    "maxUsdgAmount": 30000000,
+    "tokenWeight": 15000,
+    "maxUsdgAmount": 750000,
     "isShortable": true,
     "admin": "0x4B840868eA1092548Df1BDcc051147ff02282b50"
   },
@@ -30,8 +30,8 @@
     "tokenAddress": "0x45d4A0E4467484d46E00b57475fe8d4394236A81",
     "priceFeed": "0xcc386155f1385393cDfa5F6AE3268E56E80EDF1d",
     "isStrictStable": false,
-    "tokenWeight": 10000,
-    "maxUsdgAmount": 30000000,
+    "tokenWeight": 15000,
+    "maxUsdgAmount": 750000,
     "isShortable": true,
     "admin": "0xAe7160A86201AbeB6de0925693aF6E5a77d1871a"
   },
@@ -39,8 +39,8 @@
     "tokenAddress": "0x751Da73C410A0A0f64C143057bC5B36cfC8Ebd30",
     "priceFeed": "0xB46A73aa17D22f70eD168d22165a8D4DA337da88",
     "isStrictStable": true,
-    "tokenWeight": 10000,
-    "maxUsdgAmount": 30000000,
+    "tokenWeight": 24000,
+    "maxUsdgAmount": 2500000,
     "isShortable": false,
     "admin": "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
   },
@@ -48,8 +48,8 @@
     "tokenAddress": "0xD8824ca60F391aeFD38252968B67048FE8B91623",
     "priceFeed": "0x34EBE1cE1f9a445a72dD8139c4f72a353e00090D",
     "isStrictStable": true,
-    "tokenWeight": 10000,
-    "maxUsdgAmount": 30000000,
+    "tokenWeight": 25000,
+    "maxUsdgAmount": 2500000,
     "isShortable": false,
     "admin": "0x0e34d5003f4448c135Ef17B7d7b15089fD57ed89"
   }

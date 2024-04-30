@@ -37,7 +37,7 @@ async function main() {
     const setIsAmmEnabled = await vaultPriceFeed.setIsAmmEnabled(false);
     await setIsAmmEnabled.wait();
 
-    const glp = await deployContract("GLP", deploymentState) ;
+    const glp = await deployContract("ALP", deploymentState) ;
 
 
     const setInPrivateTransferMode = await glp.setInPrivateTransferMode(true);
@@ -126,7 +126,7 @@ async function main() {
 
 
 
-     const gmx = await deployContract("GMX", deploymentState) ;
+     const gmx = await deployContract("AGX", deploymentState) ;
 
      const setMinter = await gmx.setMinter(signer.address, true);
      await setMinter.wait();
