@@ -33,7 +33,7 @@ async function main() {
             price[key].isStrictStable
         );
         await vaultPriceFeedSetConfig.wait();
-        console.log('vaultPricefeed config')
+        console.log(key ,'vaultPricefeed config')
         const vaultSetConfig = await vault.setTokenConfig(
             price[key].tokenAddress,
             price[key].decimals,
@@ -44,7 +44,7 @@ async function main() {
             price[key].isShortable,
         );
         await vaultSetConfig.wait();
-        console.log('vault config')
+        console.log(key, 'vault config')
     }
 
     const deploymentStateJSON = JSON.stringify(price, null, 2);

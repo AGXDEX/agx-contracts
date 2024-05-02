@@ -25,6 +25,7 @@ contract YieldTracker is IYieldTracker, ReentrancyGuard {
     uint256 public cumulativeRewardPerToken;
     mapping (address => uint256) public claimableReward;
     mapping (address => uint256) public previousCumulatedRewardPerToken;
+    uint256 public totalClaim;
 
     event Claim(address receiver, uint256 amount);
 
@@ -60,6 +61,7 @@ contract YieldTracker is IYieldTracker, ReentrancyGuard {
 
         address rewardToken = IDistributor(distributor).getRewardToken(address(this));
         IERC20(rewardToken).safeTransfer(_receiver, tokenAmount);
+        totalClaim += tokenAmount;
         emit Claim(_account, tokenAmount);
 
         return tokenAmount;

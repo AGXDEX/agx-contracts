@@ -148,7 +148,6 @@ async function main() {
      const setDistribution = await rewardDistributor.setDistribution([await yieldTracker.getAddress()], [0], [await gmx.getAddress()]);
      await setDistribution.wait();
      console.log("update last Distribution time success");
-     //TODO
      const gmxmint = await gmx.mint(await rewardDistributor.getAddress(), ethers.parseEther('10000'));
      await gmxmint.wait();
      const setTokenPerInterval = await rewardDistributor.setTokensPerInterval(await yieldTracker.getAddress(), ethers.parseEther('1'));

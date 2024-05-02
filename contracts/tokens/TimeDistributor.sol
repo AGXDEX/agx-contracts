@@ -19,6 +19,7 @@ contract TimeDistributor is IDistributor {
     mapping (address => address) public rewardTokens;
     mapping (address => uint256) public override tokensPerInterval;
     mapping (address => uint256) public lastDistributionTime;
+    uint256 public totalEmission;
 
     event Distribute(address receiver, uint256 amount);
     event DistributionChange(address receiver, uint256 amount, address rewardToken);
@@ -92,7 +93,7 @@ contract TimeDistributor is IDistributor {
         if (amount == 0) { return 0; }
 
         IERC20(rewardTokens[receiver]).safeTransfer(receiver, amount);
-
+        totalEmission += amount;
         emit Distribute(receiver, amount);
         return amount;
     }

@@ -13,6 +13,7 @@ async function main() {
     const wallet = getWallet();
     const deployer = new Deployer(hre, wallet);
 
+
         const mockTokenArtifact = await hre.artifacts.readArtifact("MockToken");
         const mockToken = new ethers.Contract(
             tokenConfig.usdt.tokenAddress,
@@ -23,13 +24,14 @@ async function main() {
         await approve.wait();
 
 
+
     const rewardRouterArtifact = await hre.artifacts.readArtifact("RewardRouter");
     const rewardRouter = new ethers.Contract(
         ContractAddresses.RewardRouter.address,
         rewardRouterArtifact.abi,
         getWallet()
     )
-    const addLiq = await rewardRouter.mintAndStakeGlp(tokenConfig.usdt.tokenAddress, ethers.parseEther('1000'), 0, 0 );
+    const addLiq = await rewardRouter.mintAndStakeGlp(tokenConfig.usdt.tokenAddress, 100 * Math.pow(10, 6), 0, 0 );
     await addLiq.wait()
     console.log(addLiq.hash);
     /*    const glpManagerArtifact = await hre.artifacts.readArtifact("GlpManager");
