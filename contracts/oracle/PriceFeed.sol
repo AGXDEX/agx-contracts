@@ -37,7 +37,6 @@ contract PriceFeed is IPriceFeed,OwnableUpgradeable {
 
     function latestAnswer() public override view returns (int256) {
         require(block.timestamp < lastSetAnswerTime + (heartBeat / 10), "exceed max update delay");
-        require(isAdmin[msg.sender], "PriceFeed: forbidden");
         return answer;
     }
 
