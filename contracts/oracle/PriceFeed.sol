@@ -36,7 +36,7 @@ contract PriceFeed is IPriceFeed,OwnableUpgradeable {
     }
 
     function latestAnswer() public override view returns (int256) {
-        require(block.timestamp < lastSetAnswerTime + (heartBeat / 10), "exceed max update delay");
+        require(block.timestamp < lastSetAnswerTime + (heartBeat * 110 / 100), "exceed max update delay");
         return answer;
     }
 
