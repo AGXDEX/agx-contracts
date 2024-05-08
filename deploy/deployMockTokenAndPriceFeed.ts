@@ -27,10 +27,12 @@ async function main() {
                 [price[key].heartBeat], { initializer: "initialize" });
             price[key].priceFeed = await priceFeed.getAddress();
         }
+
+        const deploymentStateJSON = JSON.stringify(price, null, 2);
+        fs.writeFileSync("./pricefeed.json", deploymentStateJSON);
+
     }
 
-    const deploymentStateJSON = JSON.stringify(price, null, 2);
-    fs.writeFileSync("./pricefeed.json", deploymentStateJSON);
 
 
 

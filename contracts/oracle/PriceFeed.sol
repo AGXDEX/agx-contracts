@@ -28,6 +28,7 @@ contract PriceFeed is IPriceFeed,OwnableUpgradeable {
         __Ownable_init_unchained();
         isAdmin[msg.sender] = true;
         heartBeat = _heartBeat;
+        lastSetAnswerTime = block.timestamp;
     }
 
     function setAdmin(address _account, bool _isAdmin) public onlyOwner {
@@ -35,7 +36,7 @@ contract PriceFeed is IPriceFeed,OwnableUpgradeable {
     }
 
     function latestAnswer() public override view returns (int256) {
-        require(block.timestamp > lastSetAnswerTime + (heartBeat / 10), "exceed max update delay");
+        require(block.timestamp < lastSetAnswerTime + (heartBeat / 10), "exceed max update delay");
         require(isAdmin[msg.sender], "PriceFeed: forbidden");
         return answer;
     }

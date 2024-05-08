@@ -1,7 +1,7 @@
 {
   "pufETH": {
     "tokenAddress": "0x1569046dC6D4bd5d06cA5fa2fb83D2885bd87b20",
-    "priceFeed": "0xD0D3e10e0985fD63ae0bc63c93Ac4943d5EDCA41",
+    "priceFeed": "0x06109AA8C78c58ca3E8D85a5847BEBecC0DBC732",
     "isStrictStable": false,
     "tokenWeight": 10000,
     "maxUsdgAmount": 500000,
@@ -12,7 +12,7 @@
   },
   "ezETH": {
     "tokenAddress": "0xD7C43Ef14bb17C8bBD6575992aa35d9EBBfc512D",
-    "priceFeed": "0x247074B9195A3Fb2D62869FC8348ce571DE1Ae80",
+    "priceFeed": "0xbC5447688EEb97457dabdb996D38aB1B9a4C8826",
     "isStrictStable": false,
     "tokenWeight": 10000,
     "maxUsdgAmount": 500000,
@@ -23,7 +23,7 @@
   },
   "WETH": {
     "tokenAddress": "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1",
-    "priceFeed": "0x0b4a3E00B1Ac2c4b44939f121B3b0A8BC69A8560",
+    "priceFeed": "0x5b87F921936C55261a47e5185023683731137086",
     "isStrictStable": false,
     "tokenWeight": 15000,
     "maxUsdgAmount": 750000,
@@ -34,7 +34,7 @@
   },
   "WBTC": {
     "tokenAddress": "0xbEacb61e11940e38EAdCf41860b9ea31E2a90deC",
-    "priceFeed": "0x58b9F99ed8b195533dA5A40e1c6e121864cE19Ce",
+    "priceFeed": "0xeBB8188E7942E661f701e5Ed234c0b4e5017F975",
     "isStrictStable": false,
     "tokenWeight": 15000,
     "maxUsdgAmount": 750000,
@@ -45,7 +45,7 @@
   },
   "usdt": {
     "tokenAddress": "0x773646397e21C0B4a323f7FdB98B6c45F5Df5A65",
-    "priceFeed": "0x4D04600F4E4DD717cC63BD2DdF01b8C1795353f5",
+    "priceFeed": "0x48611D73392Bc2Dc2E954BC33323e9DBC1C30d47",
     "isStrictStable": true,
     "tokenWeight": 24000,
     "maxUsdgAmount": 2500000,
@@ -56,7 +56,7 @@
   },
   "usdc": {
     "tokenAddress": "0x0A8714d8fc4bE1b8f2B2AB29b8e4fEe9B271a57D",
-    "priceFeed": "0x4e48a1709dc3d1C51b3bBe6E1877d7218967485a",
+    "priceFeed": "0xD11f9F440EDEC8D1Ca588287410d01482AcD3D1F",
     "isStrictStable": true,
     "tokenWeight": 25000,
     "maxUsdgAmount": 2500000,

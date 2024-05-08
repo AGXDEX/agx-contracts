@@ -13,33 +13,17 @@ async function main() {
 
     const wallet = getWallet();
     const deployer = new Deployer(hre, wallet);
-    const timeDistributionArtifact = await hre.artifacts.readArtifact("TimeDistributor");
-    const timedistirbutor = new ethers.Contract(
-        ContractAddresses.TimeDistributor.address,
-        timeDistributionArtifact.abi,
+    const priceFeedArtifact = await hre.artifacts.readArtifact("PriceFeed");
+    const pricefeed = new ethers.Contract(
+        "0x06109AA8C78c58ca3E8D85a5847BEBecC0DBC732",
+        priceFeedArtifact.abi,
         getWallet()
     );
 
-    console.log(await timedistirbutor.totalEmission());
-    const yieldTrackerArtifact = await hre.artifacts.readArtifact("YieldTracker");
-    const yieldTracker = new ethers.Contract(
-        ContractAddresses.YieldTracker.address,
-        yieldTrackerArtifact.abi,
-        getWallet()
-    );
+    console.log(await pricefeed.heartBeat());
+    console.log(await pricefeed.lastSetAnswerTime());
+    console.log(await pricefeed.latestAnswer());
 
-    console.log(await yieldTracker.totalClaim());
-    console.log(await yieldTracker.getTokensPerInterval());
-    console.log(await yieldTracker.claimable(wallet.address));
-    const alpArtifact = await hre.artifacts.readArtifact("ALP");
-    const alp = new ethers.Contract(
-        ContractAddresses.ALP.address,
-        alpArtifact.abi,
-        getWallet()
-    );
-    const claim = await alp.claim(wallet.address);
-    await claim.wait();
-    console.log(claim.hash);
 
 
 }
