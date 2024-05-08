@@ -1,0 +1,210 @@
+{
+  "manifestVersion": "3.2",
+  "admin": {
+    "address": "0xDb0fC2f238d594f7D0183337D30a4DAe15cC08D3",
+    "txHash": "0x7ca61d1387db424a407dee35714e41e96730e8551a24f478f73ec51fddbf7d0d"
+  },
+  "proxies": [
+    {
+      "address": "0x3219eE152d633d43705855176B95B630934A33CB",
+      "txHash": "0xa9556ce86e373671c2ad32abd10b17287613769aadad409fc404fd2d2edd4cbe",
+      "kind": "transparent"
+    },
+    {
+      "address": "0xD0D3e10e0985fD63ae0bc63c93Ac4943d5EDCA41",
+      "txHash": "0x90aae2d06df7410868708aee42a637389ecff138e310e0ea00864f68dd0f58b9",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x247074B9195A3Fb2D62869FC8348ce571DE1Ae80",
+      "txHash": "0x3e414fa618a45b247647942f64e0d312eaf8ebbe6bcf3afa9728d3bcd0e6b193",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x0b4a3E00B1Ac2c4b44939f121B3b0A8BC69A8560",
+      "txHash": "0x7514a2b6f49fcae55dce3047ac44e3889134f81e7a939184be36ea7200c66144",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x58b9F99ed8b195533dA5A40e1c6e121864cE19Ce",
+      "txHash": "0xc9e0df5586f7985bf14380204501b041a6ee1d85bd821a764222fea268c8a587",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4D04600F4E4DD717cC63BD2DdF01b8C1795353f5",
+      "txHash": "0x8d320a3279e6b8747fe68ac2aedcd0b874540e6650da103c0f762a0c0a352c68",
+      "kind": "transparent"
+    },
+    {
+      "address": "0x4e48a1709dc3d1C51b3bBe6E1877d7218967485a",
+      "txHash": "0xfbf49f373d19f4f786f68d830f672ec4d4bf7064971120937919bffbbd05d82b",
+      "kind": "transparent"
+    }
+  ],
+  "impls": {
+    "78cae3cae7e28a7aec0f343edca20cb4168d912f6f61cda77bf238aead1dd124": {
+      "address": "0x897B7173158EC28241D2E6879Cf02035E04e1f96",
+      "txHash": "0x8c89e75c7345fe5f431c1da15991d8739f163f236428af47e8b5979469ab1162",
+      "layout": {
+        "solcVersion": "0.6.12",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "label": "answer",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_int256",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:12"
+          },
+          {
+            "label": "roundId",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_uint80",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:13"
+          },
+          {
+            "label": "description",
+            "offset": 0,
+            "slot": "103",
+            "type": "t_string_storage",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:14"
+          },
+          {
+            "label": "aggregator",
+            "offset": 0,
+            "slot": "104",
+            "type": "t_address",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:15"
+          },
+          {
+            "label": "decimals",
+            "offset": 0,
+            "slot": "105",
+            "type": "t_uint256",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:17"
+          },
+          {
+            "label": "heartBeat",
+            "offset": 0,
+            "slot": "106",
+            "type": "t_uint256",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:18"
+          },
+          {
+            "label": "lastSetAnswerTime",
+            "offset": 0,
+            "slot": "107",
+            "type": "t_uint256",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:19"
+          },
+          {
+            "label": "answers",
+            "offset": 0,
+            "slot": "108",
+            "type": "t_mapping(t_uint80,t_int256)",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:21"
+          },
+          {
+            "label": "isAdmin",
+            "offset": 0,
+            "slot": "109",
+            "type": "t_mapping(t_address,t_bool)",
+            "contract": "PriceFeed",
+            "src": "contracts/oracle/PriceFeed.sol:22"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_int256": {
+            "label": "int256",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_address,t_bool)": {
+            "label": "mapping(address => bool)",
+            "numberOfBytes": "32"
+          },
+          "t_mapping(t_uint80,t_int256)": {
+            "label": "mapping(uint80 => int256)",
+            "numberOfBytes": "32"
+          },
+          "t_string_storage": {
+            "label": "string",
+            "numberOfBytes": "32"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          },
+          "t_uint80": {
+            "label": "uint80",
+            "numberOfBytes": "10"
+          }
+        },
+        "namespaces": {}
+      }
+    }
+  }
+}

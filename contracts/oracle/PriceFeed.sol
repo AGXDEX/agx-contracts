@@ -2,36 +2,46 @@
 
 pragma solidity 0.6.12;
 
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+
 import "./interfaces/IPriceFeed.sol";
 
-contract PriceFeed is IPriceFeed {
+
+
+contract PriceFeed is IPriceFeed,OwnableUpgradeable {
     int256 public answer;
     uint80 public roundId;
-    string public override description = "PriceFeed";
+    string public override description;
     address public override aggregator;
 
     uint256 public decimals;
-
-    address public gov;
+    uint256 public heartBeat;
+    uint256 public lastSetAnswerTime;
 
     mapping (uint80 => int256) public answers;
     mapping (address => bool) public isAdmin;
 
-    constructor() public {
-        gov = msg.sender;
+
+
+
+    function initialize(uint256 _heartBeat) external initializer {
+        __Ownable_init_unchained();
         isAdmin[msg.sender] = true;
+        heartBeat = _heartBeat;
     }
 
-    function setAdmin(address _account, bool _isAdmin) public {
-        require(msg.sender == gov, "PriceFeed: forbidden");
+    function setAdmin(address _account, bool _isAdmin) public onlyOwner {
         isAdmin[_account] = _isAdmin;
     }
 
     function latestAnswer() public override view returns (int256) {
+        require(block.timestamp > lastSetAnswerTime + (heartBeat / 10), "exceed max update delay");
+        require(isAdmin[msg.sender], "PriceFeed: forbidden");
         return answer;
     }
 
     function latestRound() public override view returns (uint80) {
+
         return roundId;
     }
 
@@ -40,6 +50,7 @@ contract PriceFeed is IPriceFeed {
         roundId = roundId + 1;
         answer = _answer;
         answers[roundId] = _answer;
+        lastSetAnswerTime = block.timestamp;
     }
 
     // returns roundId, answer, startedAt, updatedAt, answeredInRound

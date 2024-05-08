@@ -4,11 +4,14 @@ import "ethers";
 import {ethers} from "ethers";
 import  price from  "../pricefeed.json";
 import fs from "fs";
+import {Deployer} from "@matterlabs/hardhat-zksync";
+import * as hre from "hardhat";
 // An example of a basic deploy script
 // It will deploy a Greeter contract to selected network
 // as well as verify it on Block Explorer if possible for the network
 async function main() {
-
+    const wallet = getWallet();
+    const deployer = new Deployer(hre, wallet);
     for (const key in price) {
         if(price[key].tokenAddress == ''){
             //deploy mockToken
@@ -16,7 +19,12 @@ async function main() {
             price[key].tokenAddress = await mockToken.getAddress();
         }
         if(price[key].priceFeed == ''){
-            const priceFeed = await testDeployContract("PriceFeed");
+            const contract = await deployer.loadArtifact("PriceFeed");
+
+            const priceFeed = await  await hre.zkUpgrades.deployProxy(
+                deployer.zkWallet,
+                contract,
+                [price[key].heartBeat], { initializer: "initialize" });
             price[key].priceFeed = await priceFeed.getAddress();
         }
     }
