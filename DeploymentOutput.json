@@ -45,7 +45,7 @@
   },
   "TimeDistributor": {
     "name": "TimeDistributor",
-    "address": "0x5ABb55813cf4EF88cCd0DD04e0036cD649C00949"
+    "address": "0x5ABb5813cf4EF88cCd0DD04e0036cD649C00949"
   },
   "RewardRouter": {
     "name": "RewardRouter",
@@ -59,4 +59,3 @@
     "name": "VaultReader",
     "address": "0x62e07de7479cc309b137bA9314C4F491A8a08cbB"
   }
-}
