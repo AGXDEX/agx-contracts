@@ -6,24 +6,18 @@ import  tokenConfig from  "../pricefeed.json";
 import fs from "fs";
 import {Deployer} from "@matterlabs/hardhat-zksync";
 import * as hre from "hardhat";
-import ContractAddresses from "../DeploymentOutput.json";
-import nftManagerArtifact from "../externalABI/NFTPositionsManager.json";
+import  price from  "../pricefeed.json";
+
 async function main() {
 
     const wallet = getWallet();
     const deployer = new Deployer(hre, wallet);
-    const nftManager = new ethers.Contract(
-        "0x45f84cf9620cecEDaf6742d38F480A5683030fe8",
-        nftManagerArtifact,
-        getWallet()
-    );
-    console.log(await nftManager.positions(9));
+    const priceFeedArtifact = await deployer.loadArtifact('PriceFeed');
+    for (const key in price) {
+        await hre.zkUpgrades.upgradeProxy(deployer.zkWallet, price[key].priceFeed, priceFeedArtifact);
+        console.log("upgrade success");
 
-
-
-
-
-
+    }
 }
 
 

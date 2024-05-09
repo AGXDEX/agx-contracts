@@ -20,9 +20,11 @@ async function main() {
         getWallet()
     );
 
+
     console.log(await pricefeed.heartBeat());
-    console.log(await pricefeed.lastSetAnswerTime());
+    console.log(await pricefeed.lastSetAnswerTime() );
     console.log(await pricefeed.latestAnswer());
+    console.log(await pricefeed.getTimeStamp());
 
 
 

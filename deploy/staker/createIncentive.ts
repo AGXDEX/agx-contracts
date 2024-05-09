@@ -18,7 +18,6 @@ async function main() {
 
     const approve = await agx.approve(stakerAddress, ethers.parseEther('10000'));
     await approve.wait();
-    console.log(approve.hash);
     const v3Staker = new ethers.Contract(
         stakerAddress,
         Staker,
@@ -27,12 +26,13 @@ async function main() {
     const timestamp = Math.floor(Date.now() / 1000);
     const args = {
         rewardToken: ContractAddresses.AGX.address,
-        pool: "0x4eC59bE7FE8188BCA0AAC6CcBE19D4A5cc0b3a64",
+        pool: "0x5f54797FDaA58c118Eb1EbdAbA79Ac4bFD975efA",
         startTime: timestamp + 10  ,
         endTime: timestamp + 1000000,
         refundee: getWallet().address
     };
 
+    console.log(args);
 
     const createIncentive = await v3Staker.createIncentive(
        args, ethers.parseEther('1000'));
