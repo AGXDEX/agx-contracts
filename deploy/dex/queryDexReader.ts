@@ -22,6 +22,8 @@ async function main() {
     console.log(11)
     console.log(await dexReader.owner())
     console.log(await dexReader.getSpecificNftIds([1,4,5, 8], "0x0F3aFfe0c0465F7965845123B8c23509De0b0154","0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7"));
+    console.log(await dexReader.getTokenStaked([ 8], "0x0F3aFfe0c0465F7965845123B8c23509De0b0154"));
+    console.log(await dexReader.getTokenURIs([1,2,3, 8], ));
         //console.log(await priceFeed.latestAnswer());
 
 

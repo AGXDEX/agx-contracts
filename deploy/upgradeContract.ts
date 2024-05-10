@@ -12,12 +12,10 @@ async function main() {
 
     const wallet = getWallet();
     const deployer = new Deployer(hre, wallet);
-    const priceFeedArtifact = await deployer.loadArtifact('PriceFeed');
-    for (const key in price) {
-        await hre.zkUpgrades.upgradeProxy(deployer.zkWallet, price[key].priceFeed, priceFeedArtifact);
+    const priceFeedArtifact = await deployer.loadArtifact('DexReader');
+        await hre.zkUpgrades.upgradeProxy(deployer.zkWallet, "0xCb33c510e98510Ab047e2f182c4164b2Df46cFeC", priceFeedArtifact);
         console.log("upgrade success");
 
-    }
 }
 
 
