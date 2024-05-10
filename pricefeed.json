@@ -22,7 +22,7 @@
     "heartBeat": 3600
   },
   "WETH": {
-    "tokenAddress": "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1",
+    "tokenAddress": "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7",
     "priceFeed": "0x5b87F921936C55261a47e5185023683731137086",
     "isStrictStable": false,
     "tokenWeight": 15000,
