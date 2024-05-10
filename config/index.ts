@@ -1,3 +1,4 @@
+import {ethers} from "ethers";
 
 export const ERRORS = [
     "Vault: zero error",
@@ -60,3 +61,26 @@ export const ERRORS = [
 
 export const WETH = "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1";
 export const COOL_DOWN_DURATION = 0;
+
+export const MAX_STRICT_PRICE_DEVIATION = ethers.parseEther('5000000000')
+
+export const PRICE_SAMPLE_SPACE = 1;
+export const FUNDING_INTERVAL = 3600;
+export const FUNDING_RATE_FACTOR = 100;
+
+export const STABLE_FUNDING_RATE_FACTOR = 100;
+
+export const TAX_BASIS_POINTS = 60;
+
+export const STABLE_TAX_BASIS_POINTS = 5;
+export const MINT_BURN_FEE_BASIS_POINTS = 25;
+export const SWAP_FEE_BASIS_POINTS = 25;
+
+export const STABLE_SWAP_FEE_BASIS_POINTS = 1;
+
+export const MARGIN_FEE_BASIS_POINTS = 40;
+export const LIQUIDATION_FEE_USD = ethers.parseEther('5000000000000');
+
+export const MIN_PROFIT_TIME = 10800;
+
+export const HAS_DYNAMIC_FEES = true;

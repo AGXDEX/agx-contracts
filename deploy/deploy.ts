@@ -4,12 +4,15 @@ import "ethers";
 import {ethers} from "ethers";
 import  tokenConfig from "../pricefeed.json";
 import * as readline from "readline";
+import {Deployer} from "@matterlabs/hardhat-zksync";
+import * as hre from "hardhat";
+import {MARGIN_FEE_BASIS_POINTS, MAX_STRICT_PRICE_DEVIATION, PRICE_SAMPLE_SPACE} from "../config";
 // An example of a basic deploy script
 // It will deploy a Greeter contract to selected network
 // as well as verify it on Block Explorer if possible for the network
 async function main() {
 
-  let deploymentState = loadPreviousDeployment();
+  let deploymentState: any = loadPreviousDeployment();
 
   const signer = getWallet();
   const vault = await deployContract("Vault", deploymentState);
@@ -24,13 +27,13 @@ async function main() {
   const vaultPriceFeed = await deployContract("VaultPriceFeed",deploymentState);
 
     if(await vaultPriceFeed.maxStrictPriceDeviation() ==  0 ){
-        const setMaxStrictPriceDeviation = await vaultPriceFeed.setMaxStrictPriceDeviation( 10n ** 28n);
+        const setMaxStrictPriceDeviation = await vaultPriceFeed.setMaxStrictPriceDeviation( config.MAX_STRICT_PRICE_DEVIATION);
         await setMaxStrictPriceDeviation.wait();
     }
 
 
 
-    const setPriceSampleSpace = await vaultPriceFeed.setPriceSampleSpace(1);
+    const setPriceSampleSpace = await vaultPriceFeed.setPriceSampleSpace(config.PRICE_SAMPLE_SPACE);
     await setPriceSampleSpace.wait();
 
 
@@ -83,7 +86,7 @@ async function main() {
 
 
     if(await vault.fundingRateFactor() == 0 ){
-        const setFundingRate = await vault.setFundingRate(60 * 60, 100, 100);
+        const setFundingRate = await vault.setFundingRate(config.FUNDING_INTERVAL, config.FUNDING_RATE_FACTOR, config.STABLE_FUNDING_RATE_FACTOR);
         await setFundingRate.wait();
     }
 
@@ -95,15 +98,15 @@ async function main() {
     await vaultSetManager.wait();
 
     const setFees = await vault.setFees(
-        10,
-        5,
-        20,
-        20,
-        1,
-        10,
-        (2n * 10n ** 10n) * (10n ** 20n),
-        24 * 60 * 60,
-        true
+        config.TAX_BASIS_POINTS,
+        config.STABLE_TAX_BASIS_POINTS,
+        config.MINT_BURN_FEE_BASIS_POINTS,
+        config.SWAP_FEE_BASIS_POINTS,
+        config.STABLE_SWAP_FEE_BASIS_POINTS,
+        config.MARGIN_FEE_BASIS_POINTS,
+        config.LIQUIDATION_FEE_USD,
+        config.MIN_PROFIT_TIME,
+        config.HAS_DYNAMIC_FEES
     )
     await setFees.wait();
 
@@ -164,38 +167,21 @@ async function main() {
 
      const vaultSetHandler = await glpManager.setHandler(await rewardRouter.getAddress(), true);
      await vaultSetHandler.wait();
+    const wallet = getWallet();
+    const deployer = new Deployer(hre, wallet);
+    const dexReaderArtifact =   await deployer.loadArtifact("DexReader");
+    const dexReader = await  await hre.zkUpgrades.deployProxy(
+        deployer.zkWallet,
+        dexReaderArtifact,
+        [deploymentState["NonfungibleManager"].address], { initializer: "initialize" });
+        deploymentState["DexReader"] = {
+        "name": "DexReader",
+        "address": await dexReader.getAddress()
+    }
 
     const reader = await  deployContract("Reader", deploymentState);
     const vaultReader = await  deployContract("VaultReader", deploymentState);
 
-/*
-
-
-     const  addLiquidity = await glpManager.addLiquidity(await mockToken.getAddress(), ethers.parseEther('1000'), 0, 0);
-     await addLiquidity.wait();
-
-     console.log(await glp.balanceOf(signer.address));
-     console.log( await glpManager.getAumInUsdg(true));
-     console.log( await glpManager.getAumInUsdg(false));
-
-     console.log(await yieldTracker.claimable(signer.address));
-
-
-     const decreaseLiquidity = await glpManager.removeLiquidity(await mockToken.getAddress(), ethers.parseEther('10'), 0, signer.address);
-     await decreaseLiquidity.wait();
-     console.log("decrease Liquidity success");
-
-
-     console.log(await glp.balanceOf(signer.address));
-     console.log( await glpManager.getAumInUsdg(true));
-     console.log( await glpManager.getAumInUsdg(false));
-
-     console.log(await yieldTracker.claimable(signer.address));
-
-
-
-
-*/
 
 
 
