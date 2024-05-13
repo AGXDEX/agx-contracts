@@ -15,14 +15,9 @@ async function main() {
         NFTPositionsManagerArtifact,
         getWallet()
     );
-    const tx = await nft.createAndInitializePoolIfNecessary(
-        ContractAddresses.AGX.address,
-        ContractAddresses.ALP.address,
-        300,
-        1
-    );
-    await tx.wait();
-    console.log(tx.hash);
+    const transfer = await nft.safeTransferFrom(getWallet().address, "0xa4e383E582581DEAac4020363De0a741bEfDF3Ad", 17);
+    await transfer.wait()
+    console.log(transfer.hash);
 
 }
 

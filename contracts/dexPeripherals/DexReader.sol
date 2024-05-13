@@ -4,21 +4,28 @@ pragma solidity 0.6.12;
 pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./interfaces/INonfungiblePositionManager.sol";
+import "./interfaces/IV3Factory.sol";
+import "./TickMath.sol";
 
 contract DexReader is OwnableUpgradeable{
     
     INonfungiblePositionManager public nonfungiblePositionManager;
+    IV3Factory public v3Factory;
 
 
 
-
-    function initialize(uint256 _nonfungiblePositionManager) external initializer {
+    function initialize(address _nonfungiblePositionManager, address _v3Factory) external initializer {
         __Ownable_init_unchained();
         nonfungiblePositionManager = INonfungiblePositionManager(_nonfungiblePositionManager);
+        v3Factory = IV3Factory(_v3Factory);
     }
 
     function setNonfungiblePositionManager(address  _nonfungiblePositionManager) public {
         nonfungiblePositionManager = INonfungiblePositionManager(_nonfungiblePositionManager);
+    }
+
+    function setV3Factory(address  _v3Factory) public {
+        v3Factory = IV3Factory(_v3Factory);
     }
 
     function getSpecificNftIds(uint256[] memory tokenIds, address token0, address token1) public view returns(uint256[] memory){
@@ -26,7 +33,17 @@ contract DexReader is OwnableUpgradeable{
         uint256[] memory eligibleIds = new uint256[](totalToken);
         uint256 eligibleLength = 0;
         for(uint256 i = 0; i < totalToken; i ++){
-            (, , address pool_token0, address pool_token1, , , , , , , ,) =nonfungiblePositionManager.positions(tokenIds[i]);
+            (, , address pool_token0, address pool_token1, uint24 fee, int24 tickLower, int24 tickUpper, , , , ,) =nonfungiblePositionManager.positions(tokenIds[i]);
+            if(fee != 10000){
+                continue;
+            }
+
+            int24 tickSpacing = v3Factory.feeAmountTickSpacing(fee);
+
+            int24 maxTick = TickMath.MAX_TICK - (TickMath.MAX_TICK % tickSpacing);
+            if (tickUpper < maxTick || tickLower > -maxTick){
+                continue;
+            }
             if((token0 == pool_token0 && token1 == pool_token1 )|| (token1 == pool_token0 && token0 == pool_token1)){
                 eligibleIds[eligibleLength] = tokenIds[i];
                 eligibleLength++;
