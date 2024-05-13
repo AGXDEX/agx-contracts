@@ -22,13 +22,14 @@ async function main() {
     );
     const weth = "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7"
 
-    const poolAddr = await factory.getPool(weth,"0x0F3aFfe0c0465F7965845123B8c23509De0b0154", 3000);
+    const poolAddr = await factory.getPool(weth,"0x0F3aFfe0c0465F7965845123B8c23509De0b0154", 10000);
     console.log(poolAddr);
     const pool = new ethers.Contract(
         poolAddr,
         poolArtifact.abi,
         getWallet() // Interact with the contract on behalf of this wallet
-    );
+    )
+    console.log("0x4471e21e7CC6436437f19576F8571186F164ea0F".toLowerCase());
     const slot0 = await pool.slot0();
     const sqrtPriceX96 = Number(slot0[0]);
     console.log((sqrtPriceX96/ 2** 96) ** 2)
