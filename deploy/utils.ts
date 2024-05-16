@@ -201,7 +201,7 @@ export async function sendTxn(txnPromise: any, label: string) {
   console.info(`Processsing ${label}:`)
   const txn = await txnPromise
   console.info(`Sending ${label}...`)
-  await txn.wait(2)
+  await txn.wait()
   console.info(`... Sent! ${txn.hash}`)
   return txn
 }

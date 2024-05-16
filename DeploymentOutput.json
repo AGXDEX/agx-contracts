@@ -71,5 +71,21 @@
   "PositionRouter": {
     "name": "PositionRouter",
     "address": "0x1645cdE53604ED6858175F4991762E59f6b607cE"
+  },
+  "Timelock": {
+    "name": "Timelock",
+    "address": "0x79D02f3cd0F0392515094e0dE0BfE24B66e5533C"
+  },
+  "ShortsTrackerTimelock": {
+    "name": "ShortsTrackerTimelock",
+    "address": "0x250cE2fbd5d8a6A4EBAA6d0D907775d26d78CEea"
+  },
+  "FastPriceEvents": {
+    "name": "FastPriceEvents",
+    "address": "0x6C4f1c78f328489d1C0b2CA67066bef668337b0a"
+  },
+  "FastPriceFeed": {
+    "name": "FastPriceFeed",
+    "address": "0x7D5a76c469D61C34Fc3bACD6eE83F5fB38B3b410"
   }
 }

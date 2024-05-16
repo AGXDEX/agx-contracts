@@ -42,7 +42,8 @@ const config: HardhatUserConfig = {
       url: "https://sepolia.rpc.zklink.io",
       ethNetwork: "sepolia",
       zksync: true,
-      accounts:[PRIVATE_KEY]
+      accounts:[PRIVATE_KEY],
+      verifyURL:"https://sepolia.explorer.zklink.io/contracts/verify"
     },
     nova:{
       url: "https://rpc.zklink.io",
