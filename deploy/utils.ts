@@ -71,7 +71,7 @@ type DeployContractOptions = {
    */
   wallet?: Wallet
 }
-export const testDeployContract =  async (contractArtifactName: string,  constructorArguments?: any[], options?: DeployContractOptions) => {
+export const testDeployContract = async (contractArtifactName: string, constructorArguments?: any[], options?: DeployContractOptions) => {
 
   const log = (message: string) => {
     if (!options?.silent) console.log(message);
@@ -121,10 +121,10 @@ export const testDeployContract =  async (contractArtifactName: string,  constru
   return contract;
 }
 export const deployContract = async (contractArtifactName: string, deploymentState: any, constructorArguments?: any[], options?: DeployContractOptions) => {
-  if(deploymentState[contractArtifactName] != undefined){
+  if (deploymentState[contractArtifactName] != undefined) {
     console.log(contractArtifactName, "has already been deployed");
     const contractArtifact = await hre.artifacts.readArtifact(contractArtifactName);
-    return  new ethers.Contract(
+    return new ethers.Contract(
         deploymentState[contractArtifactName].address,
         contractArtifact.abi,
         getWallet() // Interact with the contract on behalf of this wallet
@@ -167,7 +167,7 @@ export const deployContract = async (contractArtifactName: string, deploymentSta
   log(` - Encoded constructor arguments: ${constructorArgs}\n`);
   deploymentState[contractArtifactName] = {
     name: contractArtifactName,
-    address:  address
+    address: address
   }
   saveDeployment(deploymentState);
   if (!options?.noVerify && hre.network.config.verifyURL) {
@@ -191,14 +191,20 @@ export function loadPreviousDeployment() {
   let previousDeployment = {};
   if (fs.existsSync("./DeploymentOutput.json")) {
     console.log(`Loading previous deployment...`);
-    previousDeployment = require( "../DeploymentOutput.json");
+    previousDeployment = require("../DeploymentOutput.json");
     console.log(previousDeployment);
   }
   return previousDeployment;
 }
 
-
-
+export async function sendTxn(txnPromise: any, label: string) {
+  console.info(`Processsing ${label}:`)
+  const txn = await txnPromise
+  console.info(`Sending ${label}...`)
+  await txn.wait(2)
+  console.info(`... Sent! ${txn.hash}`)
+  return txn
+}
 
 
 
