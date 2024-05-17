@@ -8,7 +8,10 @@
     "isShortable": true,
     "decimals": 18,
     "admin": "0xc6e19A91Cf79A532DF2a6088334a146656CcCAA5",
-    "heartBeat": 3600
+    "heartBeat": 3600,
+    "fastPricePrecision": 1000,
+    "maxCumulativeDeltaDiff": 1000000
+
   },
   "ezETH": {
     "tokenAddress": "0xD7C43Ef14bb17C8bBD6575992aa35d9EBBfc512D",
@@ -19,7 +22,10 @@
     "isShortable": true,
     "decimals": 18,
     "admin": "0x18933E5eb504b82e668a95adfdd493D38243C5a1",
-    "heartBeat": 3600
+    "heartBeat": 3600,
+    "fastPricePrecision": 1000,
+    "maxCumulativeDeltaDiff": 1000000
+
   },
   "WETH": {
     "tokenAddress": "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7",
@@ -30,7 +36,9 @@
     "isShortable": true,
     "decimals": 18,
     "admin": "0x4B840868eA1092548Df1BDcc051147ff02282b50",
-    "heartBeat": 3600
+    "heartBeat": 3600,
+    "fastPricePrecision": 1000,
+    "maxCumulativeDeltaDiff": 1000000
   },
   "WBTC": {
     "tokenAddress": "0xbEacb61e11940e38EAdCf41860b9ea31E2a90deC",
@@ -41,7 +49,9 @@
     "isShortable": true,
     "decimals": 8,
     "admin": "0xAe7160A86201AbeB6de0925693aF6E5a77d1871a",
-    "heartBeat": 3600
+    "heartBeat": 3600,
+    "fastPricePrecision": 1000,
+    "maxCumulativeDeltaDiff": 1000000
   },
   "usdt": {
     "tokenAddress": "0x773646397e21C0B4a323f7FdB98B6c45F5Df5A65",
@@ -64,5 +74,6 @@
     "decimals": 6,
     "admin": "0x0e34d5003f4448c135Ef17B7d7b15089fD57ed89",
     "heartBeat": 86400
+
   }
 }

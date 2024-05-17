@@ -14,6 +14,7 @@ async function main() {
   const capKeeperWallet = getWallet();
   const walletAddr = await capKeeperWallet.getAddress();
 
+  const {WBTC, pufETH, ezETH, WETH } = priceFeed;
   const vaultArtifact = await hre.artifacts.readArtifact("Vault");
   const routerArtifact = await hre.artifacts.readArtifact("Router");
   const vaultPriceFeedArtifact = await hre.artifacts.readArtifact("VaultPriceFeed");
@@ -48,7 +49,8 @@ async function main() {
 
 
 
-  //await sendTxn(shortsTrackerTimeLock.signalSetHandler(positionRouter.address, true), "shortsTrackerTimelock.signalSetHandler(positionRouter)")
+  await sendTxn(shortsTrackerTimeLock.signalSetHandler(positionRouter.address, true), "shortsTrackerTimelock.signalSetHandler(positionRouter)")
+
 
   await sendTxn(router.addPlugin(positionRouterAddr), "router.addPlugin")
 
@@ -63,6 +65,9 @@ async function main() {
   await sendTxn(positionRouter.setPositionKeeper(walletAddr, true), "positionRouter.setPositionKeeper")
 
   await sendTxn(positionRouter.setCallbackGasLimit("2200000"), "positionRouter.setCallbackGasLimit")
+
+
+
  const fastPriceEvents = await deployContract("FastPriceEvents", deploymentState, []);
   const secondaryPriceFeed = await deployContract("FastPriceFeed", deploymentState, [
     5 * 60, // _priceDuration
@@ -73,7 +78,30 @@ async function main() {
     walletAddr // _tokenManager
   ])
 
-  await sendTxn(vaultPriceFeed.setSecondaryPriceFeed(secondaryPriceFeed.address), "vaultPriceFeed.setSecondaryPriceFeed")
+  //await sendTxn(vaultPriceFeed.setSecondaryPriceFeed(await secondaryPriceFeed.getAddress()), "vaultPriceFeed.setSecondaryPriceFeed")
+
+   const fastPriceTokens = [WBTC, pufETH, ezETH, WETH];
+
+  const signers = [
+    walletAddr, // coinflipcanada
+      "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
+  ]
+  const updaters = [
+    walletAddr,
+      "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
+
+  ]
+   await sendTxn(secondaryPriceFeed.initialize(1, signers, updaters), "secondaryPriceFeed.initialize")
+    await sendTxn(secondaryPriceFeed.setTokens(fastPriceTokens.map(t => t.tokenAddress), fastPriceTokens.map(t => t.fastPricePrecision)), "secondaryPriceFeed.setTokens")
+    await sendTxn(secondaryPriceFeed.setVaultPriceFeed(await vaultPriceFeed.getAddress()), "secondaryPriceFeed.setVaultPriceFeed")
+    await sendTxn(secondaryPriceFeed.setMaxTimeDeviation(60 * 60), "secondaryPriceFeed.setMaxTimeDeviation")
+    await sendTxn(secondaryPriceFeed.setSpreadBasisPointsIfInactive(50), "secondaryPriceFeed.setSpreadBasisPointsIfInactive")
+    await sendTxn(secondaryPriceFeed.setSpreadBasisPointsIfChainError(500), "secondaryPriceFeed.setSpreadBasisPointsIfChainError")
+    await sendTxn(secondaryPriceFeed.setMaxCumulativeDeltaDiffs(fastPriceTokens.map(t => t.tokenAddress), fastPriceTokens.map(t => t.maxCumulativeDeltaDiff)), "secondaryPriceFeed.setMaxCumulativeDeltaDiffs")
+    await sendTxn(secondaryPriceFeed.setPriceDataInterval(1 * 60), "secondaryPriceFeed.setPriceDataInterval")
+
+  await sendTxn(positionRouter.setPositionKeeper(await secondaryPriceFeed.getAddress(), true), "positionRouter.setPositionKeeper(secondaryPriceFeed)")
+  await sendTxn(fastPriceEvents.setIsPriceFeed(await secondaryPriceFeed.getAddress(), true), "fastPriceEvents.setIsPriceFeed")
 
 }
 
