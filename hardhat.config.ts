@@ -1,4 +1,5 @@
 import { HardhatUserConfig } from "hardhat/config";
+import "@nomicfoundation/hardhat-foundry";
 
 import "@matterlabs/hardhat-zksync";
 import "@matterlabs/hardhat-zksync-upgradable";
@@ -43,7 +44,7 @@ const config: HardhatUserConfig = {
       ethNetwork: "sepolia",
       zksync: true,
       accounts:[PRIVATE_KEY],
-      verifyURL:"https://sepolia.explorer.zklink.io/contracts/verify"
+   //   verifyURL:"https://sepolia.explorer.zklink.io/contracts/verify"
     },
     nova:{
       url: "https://rpc.zklink.io",
@@ -53,6 +54,7 @@ const config: HardhatUserConfig = {
     },
     hardhat: {
       zksync: true,
+
     },
   },
   zksolc: {

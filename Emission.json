@@ -1,0 +1,14 @@
+{
+  "ALP": {
+    "address": "0xa20E6392B381F9c6368CaC081edf2F4D61b0A80B"
+  },
+  "AGX": {
+    "address": "0x67bF4ec43223252FbC186aaBf5F9ae459429b2fC"
+  },
+  "yieldEmission": {
+    "address": "0xc5F087ad5aDF0ACb433E4FE7335ABDe2B410e5a9"
+  },
+  "emissionSchedule": {
+    "address": "0x1e92c68b63b9c128F786d0bc26D522D61420bDE1"
+  }
+}
