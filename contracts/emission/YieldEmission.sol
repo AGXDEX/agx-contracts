@@ -24,6 +24,7 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     IEmissionSchedule public emissionSchedule;
 
     uint256 public startTime;
+    bool public notified;
     mapping(address => uint256) public rewardIntegralFor;
     mapping(address => uint256) private storedPendingReward;
     uint256 public totalClaim;
@@ -36,6 +37,8 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     }
 
     function notify() public onlyOwner{
+        require(!notified, "already notified");
+        notified = true;
         startTime = block.timestamp;
         uint256 amount = emissionSchedule.distributeWeeklyEmission(1);
         rewardRate = uint128(amount / REWARD_DURATION);

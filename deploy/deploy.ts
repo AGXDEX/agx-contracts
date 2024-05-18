@@ -1,4 +1,4 @@
-import {deployContract, getWallet, loadPreviousDeployment} from "./utils";
+import {deployContract, getWallet, loadPreviousDeployment, sendTxn} from "./utils";
 import * as config from "../config";
 import "ethers";
 import {ethers} from "ethers";
@@ -135,27 +135,9 @@ async function main() {
      await setMinter.wait();
 
 
-
-
-     const yieldTracker = await deployContract("YieldTracker",deploymentState,[ await glp.getAddress()]) ;
-
-     const glpSetTracker = await glp.setYieldTrackers([await yieldTracker.getAddress()]);
-     await glpSetTracker.wait();
-
-     const rewardDistributor = await deployContract("TimeDistributor", deploymentState)  ;
-
-
-     const setRewardDistributor = await yieldTracker.setDistributor(await rewardDistributor.getAddress());
-     await setRewardDistributor.wait();
-
-     const setDistribution = await rewardDistributor.setDistribution([await yieldTracker.getAddress()], [0], [await gmx.getAddress()]);
-     await setDistribution.wait();
-     console.log("update last Distribution time success");
-     const gmxmint = await gmx.mint(await rewardDistributor.getAddress(), ethers.parseEther('10000'));
+     const gmxmint = await gmx.mint(signer.address, config.AGX_TOTAL_SUPPLY);
      await gmxmint.wait();
-     const setTokenPerInterval = await rewardDistributor.setTokensPerInterval(await yieldTracker.getAddress(), ethers.parseEther('1'));
-     await setTokenPerInterval.wait();
-     console.log("set Token interval success")
+
     const rewardRouter = await deployContract("RewardRouter", deploymentState);
     const rewardRouterInit = await rewardRouter.initialize(
         config.WETH,
@@ -165,22 +147,72 @@ async function main() {
     );
     await rewardRouterInit.wait();
 
-     const vaultSetHandler = await glpManager.setHandler(await rewardRouter.getAddress(), true);
-     await vaultSetHandler.wait();
+
+
+    const vaultSetHandler = await glpManager.setHandler(await rewardRouter.getAddress(), true);
+    await vaultSetHandler.wait();
+
+
     const wallet = getWallet();
     const deployer = new Deployer(hre, wallet);
     const dexReaderArtifact =   await deployer.loadArtifact("DexReader");
-    const dexReader = await  await hre.zkUpgrades.deployProxy(
+
+    const dexReader = await hre.zkUpgrades.deployProxy(
         deployer.zkWallet,
         dexReaderArtifact,
         [deploymentState["NonfungibleManager"].address], { initializer: "initialize" });
-        deploymentState["DexReader"] = {
+    deploymentState["DexReader"] = {
         "name": "DexReader",
         "address": await dexReader.getAddress()
     }
+    const yieldEmissionArtifact = await deployer.loadArtifact("YieldEmission");
+
+    const yieldEmission = await hre.zkUpgrades.deployProxy(
+        deployer.zkWallet,
+        yieldEmissionArtifact,
+        [await glp.getAddress(), await gmx.getAddress()], { initializer: "initialize" });
+
+    deploymentState["YieldEmission"] = {
+        "name": "YieldEmission",
+        "address": await yieldEmission.getAddress()
+    }
+
+    const emissionScheduleArtifact = await deployer.loadArtifact("EmissionSchedule");
+
+    const emissionSchedule = await hre.zkUpgrades.deployProxy(
+        deployer.zkWallet,
+        emissionScheduleArtifact,
+        [await yieldEmission.getAddress(), await gmx.getAddress()], { initializer: "initialize" });
+
+    deploymentState["EmissionSchedule"] = {
+        "name": "EmissionSchedule",
+        "address": await emissionSchedule.getAddress()
+    }
+
+    await sendTxn(yieldEmission.setEmissionSchedule(await emissionSchedule.getAddress()), "yield emission set emission schedule");
+    await sendTxn(glp.setYieldTrackers([await yieldEmission.getAddress()]), "alp set yield tracker");
+
+    await sendTxn(emissionSchedule.setWeeklySchedule(config.WEEKLY_SCHEDULE), "emissionSchedule set weeklySchedule");
+
+
+    if(Number(await gmx.balanceOf(await emissionSchedule.getAddress())) != 0 ){
+        await sendTxn(gmx.transfer(await emissionSchedule.getAddress(), config.INIT_TRANSFER), "agx transfer");
+    }
+
+    await sendTxn(yieldEmission.notify(), "yieldEmission notify");
+
+
+
+
+
+
 
     const reader = await  deployContract("Reader", deploymentState);
     const vaultReader = await  deployContract("VaultReader", deploymentState);
+
+
+
+
 
 
 

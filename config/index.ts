@@ -84,3 +84,13 @@ export const LIQUIDATION_FEE_USD = ethers.parseEther('5000000000000');
 export const MIN_PROFIT_TIME = 10800;
 
 export const HAS_DYNAMIC_FEES = true;
+
+export const AGX_TOTAL_SUPPLY = ethers.parseEther('100000000')
+
+export const WEEKLY_SCHEDULE = [
+    0,
+    ethers.parseEther('50000'),
+    ethers.parseEther('50000')
+]
+
+export const INIT_TRANSFER =  ethers.parseEther('100000');
