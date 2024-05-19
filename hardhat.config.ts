@@ -44,7 +44,7 @@ const config: HardhatUserConfig = {
       ethNetwork: "sepolia",
       zksync: true,
       accounts:[PRIVATE_KEY],
-   //   verifyURL:"https://sepolia.explorer.zklink.io/contracts/verify"
+    verifyURL:"https://sepolia.explorer.zklink.io/contract_verification"
     },
     nova:{
       url: "https://rpc.zklink.io",
@@ -58,7 +58,7 @@ const config: HardhatUserConfig = {
     },
   },
   zksolc: {
-    version: "latest",
+    version: '1.3.13',
     settings: {
       // find all available options in the official documentation
       // https://era.zksync.io/docs/tools/hardhat/hardhat-zksync-solc.html#configuration

@@ -134,9 +134,11 @@ async function main() {
      const setMinter = await gmx.setMinter(signer.address, true);
      await setMinter.wait();
 
-
+    if(Number(await gmx.balanceOf(signer.address)) == 0 ){
      const gmxmint = await gmx.mint(signer.address, config.AGX_TOTAL_SUPPLY);
      await gmxmint.wait();
+     console.log("mint gmx")
+    }
 
     const rewardRouter = await deployContract("RewardRouter", deploymentState);
     const rewardRouterInit = await rewardRouter.initialize(
@@ -160,11 +162,14 @@ async function main() {
     const dexReader = await hre.zkUpgrades.deployProxy(
         deployer.zkWallet,
         dexReaderArtifact,
-        [deploymentState["NonfungibleManager"].address], { initializer: "initialize" });
+        [deploymentState["NonfungibleManager"].address, deploymentState["V3Factory"].address], { initializer: "initialize" });
     deploymentState["DexReader"] = {
         "name": "DexReader",
         "address": await dexReader.getAddress()
     }
+
+    console.log("dex reader deployed");
+
     const yieldEmissionArtifact = await deployer.loadArtifact("YieldEmission");
 
     const yieldEmission = await hre.zkUpgrades.deployProxy(
@@ -176,6 +181,8 @@ async function main() {
         "name": "YieldEmission",
         "address": await yieldEmission.getAddress()
     }
+    console.log("YieldEmission  deployed");
+
 
     const emissionScheduleArtifact = await deployer.loadArtifact("EmissionSchedule");
 
@@ -189,13 +196,15 @@ async function main() {
         "address": await emissionSchedule.getAddress()
     }
 
+    console.log("EmissionSchedule  deployed");
+
     await sendTxn(yieldEmission.setEmissionSchedule(await emissionSchedule.getAddress()), "yield emission set emission schedule");
     await sendTxn(glp.setYieldTrackers([await yieldEmission.getAddress()]), "alp set yield tracker");
 
     await sendTxn(emissionSchedule.setWeeklySchedule(config.WEEKLY_SCHEDULE), "emissionSchedule set weeklySchedule");
 
 
-    if(Number(await gmx.balanceOf(await emissionSchedule.getAddress())) != 0 ){
+    if(Number(await gmx.balanceOf(await emissionSchedule.getAddress())) == 0 ){
         await sendTxn(gmx.transfer(await emissionSchedule.getAddress(), config.INIT_TRANSFER), "agx transfer");
     }
 
