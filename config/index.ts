@@ -59,7 +59,7 @@ export const ERRORS = [
     "Vault: maxGasPrice exceeded"
 ]
 
-export const WETH = "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7";
+export const WETH = "0x8280a4e7D5B3B658ec4580d3Bc30f5e50454F169";
 export const COOL_DOWN_DURATION = 0;
 
 export const MAX_STRICT_PRICE_DEVIATION = ethers.parseEther('5000000000')

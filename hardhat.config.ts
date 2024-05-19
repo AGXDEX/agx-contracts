@@ -9,7 +9,7 @@ dotenv.config();
 const PRIVATE_KEY = process.env.WALLET_PRIVATE_KEY || "";
 
 const config: HardhatUserConfig = {
-  defaultNetwork: "novaSepolia",
+  defaultNetwork: "nova",
   networks: {
     zkSyncSepoliaTestnet: {
       url: "https://sepolia.era.zksync.dev",
@@ -50,7 +50,8 @@ const config: HardhatUserConfig = {
       url: "https://rpc.zklink.io",
       ethNetwork: "mainnet",
       zksync: true,
-      accounts:[PRIVATE_KEY]
+      accounts:[PRIVATE_KEY],
+      verifyURL:"https://explorer.zklink.io/contract_verification"
     },
     hardhat: {
       zksync: true,
@@ -64,7 +65,7 @@ const config: HardhatUserConfig = {
       // https://era.zksync.io/docs/tools/hardhat/hardhat-zksync-solc.html#configuration
         libraries: {
               "contracts/core/PositionUtils.sol": {
-                "PositionUtils": "0xBE692936366DD23EDd63204EfDAeEc34d6a02370"
+                "PositionUtils": "0x9F8809Ce384aB7C14105CD8B12FD9c086F2b9196"
               }
             }
     },

@@ -1,7 +1,7 @@
 {
   "pufETH": {
-    "tokenAddress": "0x1569046dC6D4bd5d06cA5fa2fb83D2885bd87b20",
-    "priceFeed": "0x06109AA8C78c58ca3E8D85a5847BEBecC0DBC732",
+    "tokenAddress": "0x1B49eCf1A8323Db4abf48b2F5EFaA33F7DdAB3FC",
+    "priceFeed": "0xF6Ca3d1A7b3968049e18b917e943936bAB7bbAb2",
     "isStrictStable": false,
     "tokenWeight": 10000,
     "maxUsdgAmount": 1000000,
@@ -13,8 +13,8 @@
     "maxCumulativeDeltaDiff": 1000000
   },
   "ezETH": {
-    "tokenAddress": "0xD7C43Ef14bb17C8bBD6575992aa35d9EBBfc512D",
-    "priceFeed": "0xbC5447688EEb97457dabdb996D38aB1B9a4C8826",
+    "tokenAddress": "0x3FDB1939daB8e2d4F7a04212F142469Cd52d6402",
+    "priceFeed": "0x67dff828901e33FD9DEb55514604836E8d153C74",
     "isStrictStable": false,
     "tokenWeight": 10000,
     "maxUsdgAmount": 1000000,
@@ -26,8 +26,8 @@
     "maxCumulativeDeltaDiff": 1000000
   },
   "WETH": {
-    "tokenAddress": "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7",
-    "priceFeed": "0x5b87F921936C55261a47e5185023683731137086",
+    "tokenAddress": "0x8280a4e7D5B3B658ec4580d3Bc30f5e50454F169",
+    "priceFeed": "0xdBA32e62e929a7e2Fa65782F812416CA65208E40",
     "isStrictStable": false,
     "tokenWeight": 15000,
     "maxUsdgAmount": 1500000,
@@ -39,8 +39,8 @@
     "maxCumulativeDeltaDiff": 1000000
   },
   "WBTC": {
-    "tokenAddress": "0xbEacb61e11940e38EAdCf41860b9ea31E2a90deC",
-    "priceFeed": "0xeBB8188E7942E661f701e5Ed234c0b4e5017F975",
+    "tokenAddress": "0xDa4AaEd3A53962c83B35697Cd138cc6df43aF71f",
+    "priceFeed": "0xE0DF1Ddb3571440eCef87851461236B307130d1B",
     "isStrictStable": false,
     "tokenWeight": 15000,
     "maxUsdgAmount": 1500000,
@@ -52,8 +52,8 @@
     "maxCumulativeDeltaDiff": 1000000
   },
   "usdt": {
-    "tokenAddress": "0x773646397e21C0B4a323f7FdB98B6c45F5Df5A65",
-    "priceFeed": "0x48611D73392Bc2Dc2E954BC33323e9DBC1C30d47",
+    "tokenAddress": "0x2F8A25ac62179B31D62D7F80884AE57464699059",
+    "priceFeed": "0x9890A0647CE0dbb0dcDceA485D971B0232D997dD",
     "isStrictStable": true,
     "tokenWeight": 25000,
     "maxUsdgAmount": 5000000,
@@ -63,8 +63,8 @@
     "heartBeat": 86400
   },
   "usdc": {
-    "tokenAddress": "0x0A8714d8fc4bE1b8f2B2AB29b8e4fEe9B271a57D",
-    "priceFeed": "0xD11f9F440EDEC8D1Ca588287410d01482AcD3D1F",
+    "tokenAddress": "0x1a1A3b2ff016332e866787B311fcB63928464509",
+    "priceFeed": "0x8B6e9d86ee7e300704b42aa80b57c6ef88fAC2F4",
     "isStrictStable": true,
     "tokenWeight": 25000,
     "maxUsdgAmount": 5000000,

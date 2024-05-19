@@ -1,75 +1,11 @@
 {
   "V3Factory": {
-    "address": "0x0c283f1a3C6981eE623cb4E8AcC4f450f39D0815"
+    "address": "0xf8D35842f37800E349A993503372fb9E2CBb7E3d"
   },
   "V3Staker": {
     "address": "0x947248452C8227032b2B8c4a341F819C2d68f681"
   },
   "NonfungibleManager": {
-    "address": "0x45f84cf9620cecEDaf6742d38F480A5683030fe8"
-  },
-  "Vault": {
-    "name": "Vault",
-    "address": "0x6484F701e73404E56AcCd1Db01aa5B9F8392160b"
-  },
-  "USDG": {
-    "name": "USDG",
-    "address": "0x8Cba87E1295b0AD36269F01c76331384C2e8d870"
-  },
-  "Router": {
-    "name": "Router",
-    "address": "0xfd3B6569C360A6eCD7242077dBE21d8bc0cCff39"
-  },
-  "VaultPriceFeed": {
-    "name": "VaultPriceFeed",
-    "address": "0x328ED73054239cBB787b44F7521E85A7A1fCB44F"
-  },
-  "ALP": {
-    "name": "ALP",
-    "address": "0xBcefF2932F2c2b3aCA9bc7960EAf7071345684c0"
-  },
-  "ShortsTracker": {
-    "name": "ShortsTracker",
-    "address": "0xedd356384f22e6AfF6831E3AafCD958927b77098"
-  },
-  "GlpManager": {
-    "name": "GlpManager",
-    "address": "0xBdaE61A13ccAAe7710dd621e284A57ad9C203DAB"
-  },
-  "VaultErrorController": {
-    "name": "VaultErrorController",
-    "address": "0x17FCd8dBd197190D76eeC05CAf4E62ea61d850D9"
-  },
-  "VaultUtils": {
-    "name": "VaultUtils",
-    "address": "0xB0485d27Ca7b05B0de84429A943a4a450590E0cE"
-  },
-  "AGX": {
-    "name": "AGX",
-    "address": "0x9ed029B0A2452Db902fA1b2c9178892DcE6A1E9A"
-  },
-  "RewardRouter": {
-    "name": "RewardRouter",
-    "address": "0xDDaEF88EdF1a79F87Dcb57aBA22E6575A41E1A43"
-  },
-  "DexReader": {
-    "name": "DexReader",
-    "address": "0x998444746cF39DcaE8802B1A8Ff24120744A09E1"
-  },
-  "YieldEmission": {
-    "name": "YieldEmission",
-    "address": "0x07DACF29254D95d2c56aA6a4b1FB7302433cF9f1"
-  },
-  "EmissionSchedule": {
-    "name": "EmissionSchedule",
-    "address": "0x4379Fd818036A5B2dee6078a3a1a47da4fb62473"
-  },
-  "Reader": {
-    "name": "Reader",
-    "address": "0x129F8Cd98D9Ba466FA4fDBA11331Ba03C4d4b593"
-  },
-  "VaultReader": {
-    "name": "VaultReader",
-    "address": "0x306c9c7886cbDf45Dba692f2156aCB74Bd79944D"
+    "address": "0x18bC9fcD4C14DDdd0086FF4b661D97CF42505075"
   }
 }
