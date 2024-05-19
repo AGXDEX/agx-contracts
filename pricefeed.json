@@ -24,7 +24,6 @@
     "heartBeat": 3600,
     "fastPricePrecision": 1000,
     "maxCumulativeDeltaDiff": 1000000
-
   },
   "WETH": {
     "tokenAddress": "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7",
@@ -73,6 +72,5 @@
     "decimals": 6,
     "admin": "0x0e34d5003f4448c135Ef17B7d7b15089fD57ed89",
     "heartBeat": 86400
-
   }
 }

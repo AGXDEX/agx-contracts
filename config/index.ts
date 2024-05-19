@@ -59,7 +59,7 @@ export const ERRORS = [
     "Vault: maxGasPrice exceeded"
 ]
 
-export const WETH = "0xd7Da924AB56b87e7C1B1933c84992053FD824eA1";
+export const WETH = "0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7";
 export const COOL_DOWN_DURATION = 0;
 
 export const MAX_STRICT_PRICE_DEVIATION = ethers.parseEther('5000000000')
@@ -94,3 +94,7 @@ export const WEEKLY_SCHEDULE = [
 ]
 
 export const INIT_TRANSFER =  ethers.parseEther('100000');
+
+export const NFT_REWARD_AMOUNT = ethers.parseEther('100000');
+
+export const INCENTIVE_DURATION = 15552000;

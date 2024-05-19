@@ -1,43 +1,59 @@
 import * as hre from "hardhat";
 import { getWallet } from "../utils";
-import { ethers } from "ethers";
+import {Contract, ethers} from "ethers";
+import * as config from "../../config";
 import   Staker from "../../externalABI/UniV3Staker.json"
 import price from "../../pricefeed.json";
 import ContractAddresses from "../../DeploymentOutput.json";
+import {NFT_REWARD_AMOUNT} from "../../config";
+import factoryArtifact from "../../externalABI/UniswapV3Factory.json";
 
 async function main() {
-    const stakerAddress = "0xa4e383E582581DEAac4020363De0a741bEfDF3Ad";
+
     const agxArtifact = await hre.artifacts.readArtifact("AGX");
     const agx = new ethers.Contract(
         ContractAddresses.AGX.address,
         agxArtifact.abi,
         getWallet()
     );
- /*   const mint = await agx.mint(getWallet().address, ethers.parseEther('1000000'));
-    await mint.wait();
+    const factory = new ethers.Contract(
+        ContractAddresses.V3Factory.address,
+        factoryArtifact.abi,
+        getWallet() // Interact with the contract on behalf of this wallet
+    );
+    const createPool = await factory.createPool(
+        ContractAddresses.AGX.address,
+        config.WETH,
+        10000
+    );
+    await createPool.wait();
 
-    const approve = await agx.approve(stakerAddress, ethers.parseEther('10000'));
-    await approve.wait()*/;
+    console.log("Create pool success");
+
+
+    const approve = await agx.approve(ContractAddresses.V3Staker.address, config.NFT_REWARD_AMOUNT);
+    await approve.wait()
+
     const v3Staker = new ethers.Contract(
-        stakerAddress,
+        ContractAddresses.V3Staker.address,
         Staker,
         getWallet() //
     );
-    const timestamp = Math.floor(Date.now() / 1000);
+    const timestamp = Math.floor(Date.now() / 1000) + 100;
     const args = {
-        rewardToken: '0x2AAde57a0d52950535996E8d26eCaCb32342AeAe',
-        pool: '0x4471e21e7CC6436437f19576F8571186F164ea0F',
-        startTime: 1715588374,
-        endTime: 1716588364,
-        refundee: '0x330BD48140Cf1796e3795A6b374a673D7a4461d0'
+        rewardToken: ContractAddresses.AGX.address,
+        pool: await factory.getPool(ContractAddresses.AGX.address, config.WETH, 10000),
+        startTime: timestamp,
+        endTime: timestamp + config.INCENTIVE_DURATION,
+        refundee: getWallet().address
     };
 
     console.log(args);
 
-    const createIncentive = await v3Staker.stakeToken(
-       args, 16);
-
+    const createIncentive = await v3Staker.createIncentive(
+       args, config.NFT_REWARD_AMOUNT);
     await createIncentive.wait();
+
     console.log(createIncentive.hash);
 
 
