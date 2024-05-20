@@ -1,7 +1,7 @@
-
 // SPDX-License-Identifier: MIT
 pragma solidity 0.6.12;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
 import "../tokens/interfaces/IYieldTracker.sol";
 
 import "../tokens/interfaces/IYieldToken.sol";
@@ -11,9 +11,9 @@ import "./interfaces/IEmissionSchedule.sol";
 
 contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     using SafeERC20 for IERC20;
+    using SafeMathUpgradeable for uint256;
 
     uint256 constant REWARD_DURATION = 1 weeks;
-
     uint256 public rewardIntegral;
     uint128 public rewardRate;
     uint32 public lastUpdate;
@@ -28,6 +28,11 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     mapping(address => uint256) public rewardIntegralFor;
     mapping(address => uint256) private storedPendingReward;
     uint256 public totalClaim;
+    event ClaimReward(address account, address receiver, uint256 amount);
+    event FetchReward(uint256 week, uint256 amount);
+    event UpdateAccountReward(address account, uint256 rewardIntergralFor);
+    event UpdateRewardIntegral(uint256 intergral);
+
 
 
     function initialize(address _yieldToken, address _rewardToken) external initializer {
@@ -40,21 +45,23 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         require(!notified, "already notified");
         notified = true;
         startTime = block.timestamp;
-        uint256 amount = emissionSchedule.distributeWeeklyEmission(1);
-        rewardRate = uint128(amount / REWARD_DURATION);
+        uint256 amount = emissionSchedule.distributeWeeklyEmission();
+        rewardRate = uint128(amount.div(REWARD_DURATION));
         lastUpdate = uint32(block.timestamp);
-        periodFinish = uint32(block.timestamp + REWARD_DURATION);
+        periodFinish = uint32(block.timestamp.add(REWARD_DURATION));
+        emit FetchReward(1, amount);
     }
+
 
     function setEmissionSchedule(address _emissionSchedule)  public onlyOwner{
         emissionSchedule = IEmissionSchedule(_emissionSchedule);
     }
 
     function getWeek() public view returns (uint256 week) {
-        return (block.timestamp - startTime) / 1 weeks + 1;
+        return ((block.timestamp.sub(startTime)).div(1 weeks)).add(1);
     }
 
-    function updateRewards(address account) public override {
+    function updateRewards(address account) public  override {
         uint256 integral = _updateRewardIntegral();
         _updateIntegralForAccount(account,  integral);
     }
@@ -70,26 +77,28 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         if (duration > 0) {
             lastUpdate = uint32(updated);
             if (supply > 0) {
-                integral += (duration * rewardRate * 1e18) / supply;
+                integral = integral.add((duration.mul(rewardRate).mul(1e18)).div(supply));
                 rewardIntegral = integral;
             }
         }
+        emit UpdateRewardIntegral(rewardIntegral);
         _fetchRewards(_periodFinish);
         return integral;
     }
 
     function _fetchRewards(uint256 _periodFinish) internal {
         uint256 currentWeek = getWeek();
-        if (currentWeek < ((_periodFinish - startTime) / 1 weeks) + 1) return;
+        if (currentWeek < ((_periodFinish.sub(startTime)).div(1 weeks)).add(1)) return;
 
-        uint256 amount = emissionSchedule.distributeWeeklyEmission(currentWeek);
+        uint256 amount = emissionSchedule.distributeWeeklyEmission();
         if (block.timestamp < _periodFinish) {
-            uint256 remaining = _periodFinish - block.timestamp;
-            amount += remaining * rewardRate;
+            uint256 remaining = _periodFinish.sub(block.timestamp);
+            amount = amount.add(remaining.mul(rewardRate));
         }
-        rewardRate = uint128(amount / REWARD_DURATION);
+        rewardRate = uint128(amount.div(REWARD_DURATION));
         lastUpdate = uint32(block.timestamp);
-        periodFinish = uint32(block.timestamp + REWARD_DURATION);
+        periodFinish = uint32(block.timestamp.add(REWARD_DURATION));
+        emit FetchReward(currentWeek, amount);
     }
 
 
@@ -97,9 +106,11 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         uint256 integralFor = rewardIntegralFor[account];
         uint256 balance = yieldToken.stakedBalance(account);
         if (currentIntegral > integralFor) {
-            storedPendingReward[account] += (balance * (currentIntegral - integralFor)) / 1e18;
+            storedPendingReward[account] = storedPendingReward[account].add(((balance.mul(currentIntegral.sub(integralFor))).div(1e18)));
             rewardIntegralFor[account] = currentIntegral;
+            emit UpdateAccountReward( account, rewardIntegralFor[account]);
         }
+
     }
 
     function claim(address _account, address _receiver) external override returns (uint256) {
@@ -107,9 +118,9 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         updateRewards(_account);
         uint256 amount = storedPendingReward[_account];
         if (amount > 0) storedPendingReward[_account] = 0;
-        totalClaim += amount;
+        totalClaim = totalClaim.add(amount);
         rewardToken.safeTransfer(_receiver, amount);
-
+        emit ClaimReward(_account, _receiver, amount);
         return amount;
     }
 
@@ -123,21 +134,20 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         // pending active debt rewards
         uint256 updated = periodFinish;
         if (updated > block.timestamp) updated = block.timestamp;
-        uint256 duration = updated - lastUpdate;
+        uint256 duration = updated.sub(lastUpdate);
         uint256 integral = rewardIntegral;
         if (duration > 0) {
             uint256 supply = yieldToken.totalStaked();
             if (supply > 0) {
-                integral += (duration * rewardRate * 1e18) / supply;
+                integral = integral.add((duration.mul(rewardRate).mul(1e18)).div(supply));
             }
         }
         uint256 integralFor = rewardIntegralFor[_account];
 
         if (integral > integralFor) {
             uint256 balance = yieldToken.stakedBalance(_account);
-            amount += (balance * (integral - integralFor)) / 1e18;
+            amount = amount.add((balance.mul(integral.sub(integralFor))).div(1e18));
         }
-
         return amount;
     }
 
