@@ -86,15 +86,63 @@ export const MIN_PROFIT_TIME = 10800;
 export const HAS_DYNAMIC_FEES = true;
 
 export const AGX_TOTAL_SUPPLY = ethers.parseEther('100000000')
-
 export const WEEKLY_SCHEDULE = [
     0,
-    ethers.parseEther('50000'),
-    ethers.parseEther('50000')
+    ethers.parseEther('300000.00'),
+    ethers.parseEther('297000.00'),
+    ethers.parseEther('294030.00'),
+    ethers.parseEther('291089.70'),
+    ethers.parseEther('288178.80'),
+    ethers.parseEther('285297.01'),
+    ethers.parseEther('282444.04'),
+    ethers.parseEther('279619.60'),
+    ethers.parseEther('276823.41'),
+    ethers.parseEther('274055.17'),
+    ethers.parseEther('271314.62'),
+    ethers.parseEther('268601.48'),
+    ethers.parseEther('265915.46'),
+    ethers.parseEther('263256.31'),
+    ethers.parseEther('260623.74'),
+    ethers.parseEther('258017.51'),
+    ethers.parseEther('255437.33'),
+    ethers.parseEther('252882.96'),
+    ethers.parseEther('250354.13'),
+    ethers.parseEther('247850.59'),
+    ethers.parseEther('245372.08'),
+    ethers.parseEther('242918.36'),
+    ethers.parseEther('240489.18'),
+    ethers.parseEther('238084.29'),
+    ethers.parseEther('235703.44'),
+    ethers.parseEther('233346.41'),
+    ethers.parseEther('231012.94'),
+    ethers.parseEther('228702.81'),
+    ethers.parseEther('226415.79'),
+    ethers.parseEther('224151.63'),
+    ethers.parseEther('221910.11'),
+    ethers.parseEther('219691.01'),
+    ethers.parseEther('217494.10'),
+    ethers.parseEther('215319.16'),
+    ethers.parseEther('213165.97'),
+    ethers.parseEther('211034.31'),
+    ethers.parseEther('208923.97'),
+    ethers.parseEther('206834.73'),
+    ethers.parseEther('204766.38'),
+    ethers.parseEther('202718.71'),
+    ethers.parseEther('200691.53'),
+    ethers.parseEther('198684.61'),
+    ethers.parseEther('196697.77'),
+    ethers.parseEther('194730.79'),
+    ethers.parseEther('192783.48'),
+    ethers.parseEther('190855.65'),
+    ethers.parseEther('188947.09'),
+    ethers.parseEther('187057.62'),
+    ethers.parseEther('185187.04'),
+    ethers.parseEther('183335.17'),
+    ethers.parseEther('181501.82')
 ]
 
-export const INIT_TRANSFER =  ethers.parseEther('100000');
+export const INIT_TRANSFER =  ethers.parseEther('10000000');
 
-export const NFT_REWARD_AMOUNT = ethers.parseEther('100000');
+export const NFT_REWARD_AMOUNT = ethers.parseEther('10000000');
 
 export const INCENTIVE_DURATION = 15552000;
