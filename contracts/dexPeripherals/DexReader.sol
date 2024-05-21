@@ -57,13 +57,13 @@ contract DexReader is OwnableUpgradeable{
         return eligibleIds;
     }
 
-    function getTokenURIs(uint256[] memory _tokenIds) public view returns(string[] memory){
+    function getTokenURIs(uint256[] memory _tokenIds) public view returns(string[] memory, uint256[] memory){
         uint256 totalToken = _tokenIds.length;
         string[] memory tokenURIs =  new string[](totalToken);
         for(uint256 i = 0; i < totalToken; i ++){
             tokenURIs[i] = nonfungiblePositionManager.tokenURI(_tokenIds[i]);
         }
-        return tokenURIs;
+        return (tokenURIs, _tokenIds);
     }
 
     function getTokenStaked(uint256[] memory _tokenIds, address _token0) public view  returns(uint256){
