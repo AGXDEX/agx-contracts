@@ -11,6 +11,10 @@
       "kind": "transparent"
     },
     {
+      "address": "0xCDbee39Ef4ace7c4cCebcEd19C9521371A944836",
+      "kind": "transparent"
+    },
+    {
       "address": "0xD0D3e10e0985fD63ae0bc63c93Ac4943d5EDCA41",
       "txHash": "0x90aae2d06df7410868708aee42a637389ecff138e310e0ea00864f68dd0f58b9",
       "kind": "transparent"
@@ -3928,7 +3932,7 @@
             "label": "nonfungiblePositionManager",
             "offset": 0,
             "slot": "101",
-            "type": "t_contract(INonfungiblePositionManager)21609",
+            "type": "t_contract(INonfungiblePositionManager)21964",
             "contract": "DexReader",
             "src": "contracts/dexPeripherals/DexReader.sol:12"
           },
@@ -3936,7 +3940,7 @@
             "label": "v3Factory",
             "offset": 0,
             "slot": "102",
-            "type": "t_contract(IV3Factory)21619",
+            "type": "t_contract(IV3Factory)21974",
             "contract": "DexReader",
             "src": "contracts/dexPeripherals/DexReader.sol:13"
           }
@@ -3958,11 +3962,11 @@
             "label": "bool",
             "numberOfBytes": "1"
           },
-          "t_contract(INonfungiblePositionManager)21609": {
+          "t_contract(INonfungiblePositionManager)21964": {
             "label": "contract INonfungiblePositionManager",
             "numberOfBytes": "20"
           },
-          "t_contract(IV3Factory)21619": {
+          "t_contract(IV3Factory)21974": {
             "label": "contract IV3Factory",
             "numberOfBytes": "20"
           },
@@ -4268,6 +4272,102 @@
           },
           "t_contract(IERC20)27763": {
             "label": "contract IERC20",
+            "numberOfBytes": "20"
+          },
+          "t_uint256": {
+            "label": "uint256",
+            "numberOfBytes": "32"
+          }
+        },
+        "namespaces": {}
+      }
+    },
+    "65753f4e4889b6c66adf61309663a66e7359bb98c87c3ad05e21748a8e20a4eb": {
+      "address": "0x767457FF1e27fe1d32C0c1117D424C37fCA48364",
+      "txHash": "0xe039d9d8f49fc7bd03268bdfc5b0eae6c3664a967ec487437a3f3c3a0df6abc2",
+      "layout": {
+        "solcVersion": "0.6.12",
+        "storage": [
+          {
+            "label": "_initialized",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:25"
+          },
+          {
+            "label": "_initializing",
+            "offset": 1,
+            "slot": "0",
+            "type": "t_bool",
+            "contract": "Initializable",
+            "src": "@openzeppelin/contracts-upgradeable/proxy/Initializable.sol:30"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_uint256)50_storage",
+            "contract": "ContextUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/utils/ContextUpgradeable.sol:31"
+          },
+          {
+            "label": "_owner",
+            "offset": 0,
+            "slot": "51",
+            "type": "t_address",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:20"
+          },
+          {
+            "label": "__gap",
+            "offset": 0,
+            "slot": "52",
+            "type": "t_array(t_uint256)49_storage",
+            "contract": "OwnableUpgradeable",
+            "src": "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol:74"
+          },
+          {
+            "label": "nonfungiblePositionManager",
+            "offset": 0,
+            "slot": "101",
+            "type": "t_contract(INonfungiblePositionManager)21969",
+            "contract": "DexReader",
+            "src": "contracts/dexPeripherals/DexReader.sol:12"
+          },
+          {
+            "label": "v3Factory",
+            "offset": 0,
+            "slot": "102",
+            "type": "t_contract(IV3Factory)21979",
+            "contract": "DexReader",
+            "src": "contracts/dexPeripherals/DexReader.sol:13"
+          }
+        ],
+        "types": {
+          "t_address": {
+            "label": "address",
+            "numberOfBytes": "20"
+          },
+          "t_array(t_uint256)49_storage": {
+            "label": "uint256[49]",
+            "numberOfBytes": "1568"
+          },
+          "t_array(t_uint256)50_storage": {
+            "label": "uint256[50]",
+            "numberOfBytes": "1600"
+          },
+          "t_bool": {
+            "label": "bool",
+            "numberOfBytes": "1"
+          },
+          "t_contract(INonfungiblePositionManager)21969": {
+            "label": "contract INonfungiblePositionManager",
+            "numberOfBytes": "20"
+          },
+          "t_contract(IV3Factory)21979": {
+            "label": "contract IV3Factory",
             "numberOfBytes": "20"
           },
           "t_uint256": {

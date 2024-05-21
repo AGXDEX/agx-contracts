@@ -4,6 +4,7 @@ import {ethers} from "ethers";
 import fs from "fs";
 import {Deployer} from "@matterlabs/hardhat-zksync";
 import * as hre from "hardhat";
+import ContractAddresses from "../../DeploymentOutput.json"
 
 async function main() {
 
@@ -13,14 +14,14 @@ async function main() {
     const dexReaderArtifact = await hre.artifacts.readArtifact("DexReader");
 
     const dexReader = new ethers.Contract(
-            "0xCb33c510e98510Ab047e2f182c4164b2Df46cFeC",
+            ContractAddresses.DexReader.address,
             dexReaderArtifact.abi,
             getWallet()
         );
-    const set = await dexReader.setV3Factory("0x0c283f1a3C6981eE623cb4E8AcC4f450f39D0815");
-    await set.wait();
-    console.log(await dexReader.getSpecificNftIds([ 15,17, 22], "0x0F3aFfe0c0465F7965845123B8c23509De0b0154","0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7"));
-        //console.log(await priceFeed.latestAnswer());
+    //const set = await dexReader.setV3Factory("0x0c283f1a3C6981eE623cb4E8AcC4f450f39D0815");
+    //await set.wait();
+    console.log(await dexReader.getSpecificNftIds([ 24,32, 117], ContractAddresses.AGX.address,"0x6e42d10eB474a17b14f3cfeAC2590bfa604313C7"));
+    console.log(await dexReader.getTokenURIs([ 24,32, 117]));
 
 
 

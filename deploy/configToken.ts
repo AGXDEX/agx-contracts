@@ -25,16 +25,16 @@ async function main() {
     )
 
 
-    for (const key in price) {
+//    for (const key in price) {
         const vaultPriceFeedSetConfig = await await vaultPricefeed.setTokenConfig(
-            price[key].tokenAddress,
-            price[key].priceFeed,
+            ethers.ZeroAddress,
+            "0x5b87F921936C55261a47e5185023683731137086",
             8,
-            price[key].isStrictStable
+            false
         );
         await vaultPriceFeedSetConfig.wait();
-        console.log(key ,'vaultPricefeed config')
-        const vaultSetConfig = await vault.setTokenConfig(
+        //console.log(key ,'vaultPricefeed config')
+    /*    const vaultSetConfig = await vault.setTokenConfig(
             price[key].tokenAddress,
             price[key].decimals,
             price[key].tokenWeight,
@@ -44,12 +44,12 @@ async function main() {
             price[key].isShortable,
         );
         await vaultSetConfig.wait();
-        console.log(key, 'vault config')
-    }
+        console.log(key, 'vault config')*/
+   // }
 
-    const deploymentStateJSON = JSON.stringify(price, null, 2);
+  /*  const deploymentStateJSON = JSON.stringify(price, null, 2);
     fs.writeFileSync("./pricefeed.json", deploymentStateJSON);
-
+*/
 
 
 
