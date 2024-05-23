@@ -141,8 +141,8 @@ export const WEEKLY_SCHEDULE = [
     ethers.parseEther('181501.82')
 ]
 
-export const INIT_TRANSFER =  ethers.parseEther('10000000');
+export const INIT_TRANSFER =  ethers.parseEther('5000000');
 
-export const NFT_REWARD_AMOUNT = ethers.parseEther('10000000');
+export const NFT_REWARD_AMOUNT = ethers.parseEther('2500000');
 
 export const INCENTIVE_DURATION = 15552000;
