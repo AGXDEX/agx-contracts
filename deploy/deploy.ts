@@ -162,7 +162,7 @@ async function main() {
     const dexReader = await hre.zkUpgrades.deployProxy(
         deployer.zkWallet,
         dexReaderArtifact,
-        [deploymentState["NonfungibleManager"].address, deploymentState["V3Factory"].address], { initializer: "initialize" });
+        [deploymentState["NonfungibleManager"].address, deploymentState["V3Factory"].address, deploymentState["V3Staker"].address], { initializer: "initialize" });
     deploymentState["DexReader"] = {
         "name": "DexReader",
         "address": await dexReader.getAddress()

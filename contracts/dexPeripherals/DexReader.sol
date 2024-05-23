@@ -5,28 +5,46 @@ pragma experimental ABIEncoderV2;
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "./interfaces/INonfungiblePositionManager.sol";
 import "./interfaces/IV3Factory.sol";
+import "./interfaces/IV3Staker.sol";
 import "./TickMath.sol";
 
 contract DexReader is OwnableUpgradeable{
     
     INonfungiblePositionManager public nonfungiblePositionManager;
     IV3Factory public v3Factory;
+    IV3Staker public v3Staker;
 
 
-
-    function initialize(address _nonfungiblePositionManager, address _v3Factory) external initializer {
+    function initialize(address _nonfungiblePositionManager, address _v3Factory, address _v3Staker) external initializer {
         __Ownable_init_unchained();
         nonfungiblePositionManager = INonfungiblePositionManager(_nonfungiblePositionManager);
         v3Factory = IV3Factory(_v3Factory);
+        v3Staker = IV3Staker(_v3Staker);
     }
 
-    function setNonfungiblePositionManager(address  _nonfungiblePositionManager) public {
+    function setNonfungiblePositionManager(address  _nonfungiblePositionManager) public onlyOwner{
         nonfungiblePositionManager = INonfungiblePositionManager(_nonfungiblePositionManager);
     }
 
-    function setV3Factory(address  _v3Factory) public {
+    function setV3Factory(address  _v3Factory) public onlyOwner{
         v3Factory = IV3Factory(_v3Factory);
     }
+
+    function setV3Staker(address  _v3Staker) public onlyOwner {
+        v3Staker = IV3Staker(_v3Staker);
+    }
+
+    function getRewardInfos(IV3Staker.IncentiveKey memory key, uint256[] memory tokenIds) public view returns(uint256[] memory ){
+        uint256 totalToken = tokenIds.length;
+        uint256[] memory rewards = new uint256[](totalToken);
+        for(uint256 i = 0; i < totalToken; i ++){
+            (uint256 reward, ) = v3Staker.getRewardInfo(key, tokenIds[i]);
+            rewards[i] = reward;
+        }
+        return rewards;
+    }
+
+
 
     function getSpecificNftIds(uint256[] memory tokenIds, address token0, address token1) public view returns(uint256[] memory){
         uint256 totalToken = tokenIds.length;
