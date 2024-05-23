@@ -34,14 +34,14 @@ contract DexReader is OwnableUpgradeable{
         v3Staker = IV3Staker(_v3Staker);
     }
 
-    function getRewardInfos(IV3Staker.IncentiveKey memory key, uint256[] memory tokenIds) public view returns(uint256[] memory ){
+    function getRewardInfos(IV3Staker.IncentiveKey memory key, uint256[] memory tokenIds) public view returns(uint256[] memory, uint256[] memory ){
         uint256 totalToken = tokenIds.length;
         uint256[] memory rewards = new uint256[](totalToken);
         for(uint256 i = 0; i < totalToken; i ++){
             (uint256 reward, ) = v3Staker.getRewardInfo(key, tokenIds[i]);
             rewards[i] = reward;
         }
-        return rewards;
+        return (rewards, tokenIds);
     }
 
 
