@@ -86,7 +86,6 @@ export const MIN_PROFIT_TIME = 10800;
 export const HAS_DYNAMIC_FEES = true;
 
 export const AGX_TOTAL_SUPPLY = ethers.parseEther('100000000')
-
 export const WEEKLY_SCHEDULE = [
     0,
     ethers.parseEther('300000.00'),
@@ -142,8 +141,8 @@ export const WEEKLY_SCHEDULE = [
     ethers.parseEther('181501.82')
 ]
 
-export const INIT_TRANSFER =  ethers.parseEther('1000000');
+export const INIT_TRANSFER =  ethers.parseEther('5000000');
 
-export const NFT_REWARD_AMOUNT = ethers.parseEther('10000000');
+export const NFT_REWARD_AMOUNT = ethers.parseEther('2500000');
 
 export const INCENTIVE_DURATION = 15552000;
