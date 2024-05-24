@@ -7,6 +7,7 @@ import price from "../../pricefeed.json";
 import ContractAddresses from "../../DeploymentOutput.json";
 import {NFT_REWARD_AMOUNT} from "../../config";
 import factoryArtifact from "../../externalABI/UniswapV3Factory.json";
+import fs from "fs";
 
 async function main() {
 
@@ -49,6 +50,8 @@ async function main() {
     };
 
     console.log(args);
+    const deploymentStateJSON = JSON.stringify(args, null, 2);
+    fs.writeFileSync("../../Incentive.json", deploymentStateJSON);
 
     const createIncentive = await v3Staker.createIncentive(
        args, config.NFT_REWARD_AMOUNT);
