@@ -51,7 +51,7 @@ async function main() {
 
     console.log(args);
     const deploymentStateJSON = JSON.stringify(args, null, 2);
-    fs.writeFileSync("../../Incentive.json", deploymentStateJSON);
+    fs.writeFileSync("./Incentive.json", deploymentStateJSON);
 
     const createIncentive = await v3Staker.createIncentive(
        args, config.NFT_REWARD_AMOUNT);
