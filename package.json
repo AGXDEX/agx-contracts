@@ -14,6 +14,7 @@
     "run:priceFeed": "ts-node priceFeedService/priceFeed.service.ts"
   },
   "devDependencies": {
+    "@uniswap/v3-core": "https://github.com/uniswap-zksync/era-uniswap-v3-core.git#v1.0.0-zksync-era",
     "@matterlabs/hardhat-zksync": "^1.0.0",
     "@matterlabs/hardhat-zksync-deploy": "^1.1.1",
     "@matterlabs/hardhat-zksync-solc": "^1.0.3",
