@@ -50,11 +50,6 @@ async function main() {
     const deploymentStateJSON = JSON.stringify(price, null, 2);
     fs.writeFileSync("./pricefeed.json", deploymentStateJSON);
 
-    const ezETH = "0x3FDB1939daB8e2d4F7a04212F142469Cd52d6402"
-    const disableEzToken = await vault.clearTokenConfig(ezETH);
-    await disableEzToken.wait();
-
-    console.log(disableEzToken.hash);
 
 
 
