@@ -41,6 +41,7 @@ contract StakeAGX is OwnableUpgradeable {
     mapping(address => uint256) public userTotalStakedWithMultiplier;
     uint256 public totalStakedWithMultiplier;
     uint256 public totalStakedWithoutMultiplier;
+    mapping(address => uint256) public userTotalStakedWithoutMultiplier;
 
 
 
@@ -86,13 +87,13 @@ contract StakeAGX is OwnableUpgradeable {
             lockupRewardMultipliers[periods[i]] = mutipliers[i];
         }
     }
+
     function stake(uint256 _amount, uint256 period) external {
         agx.safeTransferFrom(msg.sender, address (this), _amount);
         uint256 id = ++stakeIDNext;
         _stake( id, _amount, period);
 
         emit Staked(msg.sender,  id, _amount, period);
-
     }
 
     function _stake(
@@ -113,6 +114,7 @@ contract StakeAGX is OwnableUpgradeable {
         });
         uint256 amountWithMultiplier =  _amount.mul(multiplier);
         userTotalStakedWithMultiplier[msg.sender] = userTotalStakedWithMultiplier[msg.sender].add(amountWithMultiplier);
+        userTotalStakedWithoutMultiplier[msg.sender] = userTotalStakedWithoutMultiplier[msg.sender].add(_amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.add(amountWithMultiplier);
         totalStakedWithoutMultiplier = totalStakedWithoutMultiplier.add(_amount);
     }
@@ -127,6 +129,7 @@ contract StakeAGX is OwnableUpgradeable {
         require(stakeInfo.lockupStartTime + stakeInfo.period <= block.timestamp, "can not unstake now");
         uint256 amountWithMultiplier =  stakeInfo.amount.mul(stakeInfo.multiplier);
         userTotalStakedWithMultiplier[msg.sender] = userTotalStakedWithMultiplier[msg.sender].sub(amountWithMultiplier);
+        userTotalStakedWithoutMultiplier[msg.sender] = userTotalStakedWithoutMultiplier[msg.sender].sub(amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.sub(amountWithMultiplier);
         totalStakedWithoutMultiplier = totalStakedWithoutMultiplier.sub(amount);
         delete stakeInfos[msg.sender][_id];
@@ -139,7 +142,7 @@ contract StakeAGX is OwnableUpgradeable {
     ) external {
         (uint256 totalStakedAmount) = _unstake(id);
         agx.safeTransfer(msg.sender,totalStakedAmount );
-        emit UnStake(msg.sender, totalStakedAmount, id);
+        emit UnStake(msg.sender, id, totalStakedAmount);
     }
 
     function updateRewards(address account) public  {
@@ -191,7 +194,6 @@ contract StakeAGX is OwnableUpgradeable {
             rewardIntegralFor[account] = currentIntegral;
             emit UpdateAccountReward( account, rewardIntegralFor[account]);
         }
-
     }
 
     function claim() external returns (uint256) {
