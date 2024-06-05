@@ -146,3 +146,13 @@ export const INIT_TRANSFER =  ethers.parseEther('5000000');
 export const NFT_REWARD_AMOUNT = ethers.parseEther('2500000');
 
 export const INCENTIVE_DURATION = 15552000;
+
+export const STAKE_WEEKLY_SCHEDULE = [
+    0,
+    ethers.parseEther('200000.00'),
+    ethers.parseEther('200000.00'),
+    ethers.parseEther('200000.00'),
+    ethers.parseEther('200000.00'),
+]
+
+export const  STAKE_INIT_TRANSFER =  ethers.parseEther('600000');
