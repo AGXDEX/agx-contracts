@@ -68,7 +68,7 @@ async function main() {
     const day_seconds = 86400;
     await sendTxn(stakeAGX.setLockupRewardMultipliers(
         [day_seconds * 30, day_seconds * 60, day_seconds * 90, day_seconds * 180, day_seconds * 360],
-        [100, 200, 300, 400, 500]
+        [1, 2, 3, 4, 5]
     ), "yieldEmission notify");
 
     saveDeployment(deploymentState);
