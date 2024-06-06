@@ -19,7 +19,7 @@ aa
         priceFeedArtifact.abi,
         getWallet()
     );
-
+aa
 
     console.log(await pricefeed.heartBeat());
     console.log(await pricefeed.lastSetAnswerTime() );
