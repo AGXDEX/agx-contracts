@@ -182,7 +182,7 @@ export const deployContract = async (contractArtifactName: string, deploymentSta
 
   return contract;
 }
-function saveDeployment(deploymentState: any) {
+export function saveDeployment(deploymentState: any) {
   const deploymentStateJSON = JSON.stringify(deploymentState, null, 2);
   fs.writeFileSync("./DeploymentOutput.json", deploymentStateJSON);
 }
