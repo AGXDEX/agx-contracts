@@ -18,18 +18,25 @@ async function main() {
   const vaultArtifact = await hre.artifacts.readArtifact("Vault");
   const routerArtifact = await hre.artifacts.readArtifact("Router");
   const vaultPriceFeedArtifact = await hre.artifacts.readArtifact("VaultPriceFeed");
+  const shortsTrackerArtifact = await hre.artifacts.readArtifact("ShortsTracker");
+
   const vault = new Contract(
     ContractAddresses.Vault.address,
     vaultArtifact.abi,
     getWallet()
   )
-  const vaultAddr = await vault.getAddress();
+ const vaultAddr = await vault.getAddress();
   const routerAddr = await vault.router();
   const router = new Contract(
     routerAddr,
     routerArtifact.abi,
     getWallet()
   )
+    const shortsTracker = new Contract(
+        ContractAddresses.ShortsTracker.address,
+        shortsTrackerArtifact.abi,
+        getWallet()
+    )
   const vaultPriceFeed = new Contract(
       ContractAddresses.VaultPriceFeed.address,
       vaultPriceFeedArtifact.abi,
@@ -90,8 +97,8 @@ async function main() {
   const updaters = [
     walletAddr,
       "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
-
   ]
+    const shortsHandler = "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90";
    await sendTxn(secondaryPriceFeed.initialize(1, signers, updaters), "secondaryPriceFeed.initialize")
     await sendTxn(secondaryPriceFeed.setTokens(fastPriceTokens.map(t => t.tokenAddress), fastPriceTokens.map(t => t.fastPricePrecision)), "secondaryPriceFeed.setTokens")
     await sendTxn(secondaryPriceFeed.setVaultPriceFeed(await vaultPriceFeed.getAddress()), "secondaryPriceFeed.setVaultPriceFeed")
@@ -101,8 +108,13 @@ async function main() {
     await sendTxn(secondaryPriceFeed.setMaxCumulativeDeltaDiffs(fastPriceTokens.map(t => t.tokenAddress), fastPriceTokens.map(t => t.maxCumulativeDeltaDiff)), "secondaryPriceFeed.setMaxCumulativeDeltaDiffs")
     await sendTxn(secondaryPriceFeed.setPriceDataInterval(1 * 60), "secondaryPriceFeed.setPriceDataInterval")
 
-  await sendTxn(positionRouter.setPositionKeeper(await secondaryPriceFeed.getAddress(), true), "positionRouter.setPositionKeeper(secondaryPriceFeed)")
-  await sendTxn(fastPriceEvents.setIsPriceFeed(await secondaryPriceFeed.getAddress(), true), "fastPriceEvents.setIsPriceFeed")
+    await sendTxn(positionRouter.setPositionKeeper(await secondaryPriceFeed.getAddress(), true), "positionRouter.setPositionKeeper(secondaryPriceFeed)")
+    await sendTxn(fastPriceEvents.setIsPriceFeed(await secondaryPriceFeed.getAddress(), true), "fastPriceEvents.setIsPriceFeed")
+    await sendTxn(fastPriceEvents.setIsPriceFeed(await secondaryPriceFeed.getAddress(), true), "fastPriceEvents.setIsPriceFeed")
+
+    await sendTxn(vault.setGov(await timeLock.getAddress()), "vault.setGov")
+    await sendTxn(shortsTracker.setHandler(shortsHandler, true), "shortsTracker.setHandler");
+    await sendTxn(shortsTracker.setHandler(positionRouterAddr, true), "shortsTracker.setHandler");
 
 }
 
