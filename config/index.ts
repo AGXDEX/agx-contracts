@@ -1,4 +1,5 @@
 import {ethers} from "ethers";
+import  priceFeedConfig from "../pricefeed.json";
 
 export const ERRORS = [
     "Vault: zero error",
@@ -59,7 +60,7 @@ export const ERRORS = [
     "Vault: maxGasPrice exceeded"
 ]
 
-export const WETH = "0x8280a4e7D5B3B658ec4580d3Bc30f5e50454F169";
+export const WETH = priceFeedConfig.WETH.tokenAddress;
 export const COOL_DOWN_DURATION = 0;
 
 export const MAX_STRICT_PRICE_DEVIATION = ethers.parseEther('5000000000')
@@ -150,9 +151,34 @@ export const INCENTIVE_DURATION = 15552000;
 export const STAKE_WEEKLY_SCHEDULE = [
     0,
     ethers.parseEther('200000.00'),
-    ethers.parseEther('200000.00'),
-    ethers.parseEther('200000.00'),
-    ethers.parseEther('200000.00'),
+    ethers.parseEther('198000.00'),
+    ethers.parseEther('196020.00'),
+    ethers.parseEther('194059.80'),
+    ethers.parseEther('192119.20'),
+    ethers.parseEther('190198.01'),
+    ethers.parseEther('188296.03'),
+    ethers.parseEther('186413.07'),
+    ethers.parseEther('184548.94'),
+    ethers.parseEther('182703.45'),
+    ethers.parseEther('180876.42'),
+    ethers.parseEther('179067.65'),
+    ethers.parseEther('177276.97'),
+    ethers.parseEther('175504.20'),
+    ethers.parseEther('173749.16'),
+    ethers.parseEther('172011.67'),
+    ethers.parseEther('170291.55'),
+    ethers.parseEther('168588.64'),
+    ethers.parseEther('166902.75'),
+    ethers.parseEther('165233.72'),
+    ethers.parseEther('163581.39'),
+    ethers.parseEther('161945.57'),
+    ethers.parseEther('160326.12'),
+    ethers.parseEther('158722.86'),
+    ethers.parseEther('157135.63'),
+    ethers.parseEther('155564.27'),
+    ethers.parseEther('154008.63')
 ]
 
-export const  STAKE_INIT_TRANSFER =  ethers.parseEther('600000');
+export const  STAKE_INIT_TRANSFER =  ethers.parseEther('5000000');
+
+
