@@ -49,7 +49,7 @@ async function main() {
 
 
 
-  await sendTxn(shortsTrackerTimeLock.signalSetHandler(positionRouter.address, true), "shortsTrackerTimelock.signalSetHandler(positionRouter)")
+  //await sendTxn(shortsTrackerTimeLock.signalSetHandler(await positionRouter.getAddress(), true), "shortsTrackerTimelock.signalSetHandler(positionRouter)")
 
 
   await sendTxn(router.addPlugin(positionRouterAddr), "router.addPlugin")
@@ -78,9 +78,10 @@ async function main() {
     walletAddr // _tokenManager
   ])
 
-  //await sendTxn(vaultPriceFeed.setSecondaryPriceFeed(await secondaryPriceFeed.getAddress()), "vaultPriceFeed.setSecondaryPriceFeed")
 
-   const fastPriceTokens = [WBTC, pufETH, ezETH, WETH];
+  await sendTxn(vaultPriceFeed.setSecondaryPriceFeed(await secondaryPriceFeed.getAddress()), "vaultPriceFeed.setSecondaryPriceFeed")
+
+   const fastPriceTokens = [WBTC, pufETH, WETH];
 
   const signers = [
     walletAddr, // coinflipcanada
