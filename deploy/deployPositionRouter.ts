@@ -3,6 +3,7 @@ import {Contract, ethers} from "ethers";
 import * as hre from "hardhat";
 import * as ContractAddresses from "../DeploymentOutput.json";
 import * as priceFeed from "../pricefeed.json";
+import * as config from "../config/index";
 
 
 async function main() {
@@ -14,7 +15,7 @@ async function main() {
   const capKeeperWallet = getWallet();
   const walletAddr = await capKeeperWallet.getAddress();
 
-  const {WBTC, pufETH, ezETH, WETH } = priceFeed;
+  const {WBTC, pufETH, weETH, WETH } = priceFeed;
   const vaultArtifact = await hre.artifacts.readArtifact("Vault");
   const routerArtifact = await hre.artifacts.readArtifact("Router");
   const vaultPriceFeedArtifact = await hre.artifacts.readArtifact("VaultPriceFeed");
@@ -88,18 +89,19 @@ async function main() {
 
   await sendTxn(vaultPriceFeed.setSecondaryPriceFeed(await secondaryPriceFeed.getAddress()), "vaultPriceFeed.setSecondaryPriceFeed")
 
-   const fastPriceTokens = [WBTC, pufETH, WETH];
+   const fastPriceTokens = [WBTC, pufETH, weETH, WETH];
 
   const signers = [
     walletAddr, // coinflipcanada
-      "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
   ]
-  const updaters = [
-    walletAddr,
-      "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90"
+  const fastPriceFeedUpdaters = [
+      config.EXECUTE_DECREASE_ADMIN,
+      config.EXECUTE_INCREASE_ADMIN,
+      config.FEED_ADMIN
   ]
+
     const shortsHandler = "0xd14653F6fA807107084e5d8a18bB5Ce3C5BbFB90";
-   await sendTxn(secondaryPriceFeed.initialize(1, signers, updaters), "secondaryPriceFeed.initialize")
+   await sendTxn(secondaryPriceFeed.initialize(1, signers, fastPriceFeedUpdaters), "secondaryPriceFeed.initialize")
     await sendTxn(secondaryPriceFeed.setTokens(fastPriceTokens.map(t => t.tokenAddress), fastPriceTokens.map(t => t.fastPricePrecision)), "secondaryPriceFeed.setTokens")
     await sendTxn(secondaryPriceFeed.setVaultPriceFeed(await vaultPriceFeed.getAddress()), "secondaryPriceFeed.setVaultPriceFeed")
     await sendTxn(secondaryPriceFeed.setMaxTimeDeviation(60 * 60), "secondaryPriceFeed.setMaxTimeDeviation")
@@ -112,9 +114,15 @@ async function main() {
     await sendTxn(fastPriceEvents.setIsPriceFeed(await secondaryPriceFeed.getAddress(), true), "fastPriceEvents.setIsPriceFeed")
     await sendTxn(fastPriceEvents.setIsPriceFeed(await secondaryPriceFeed.getAddress(), true), "fastPriceEvents.setIsPriceFeed")
 
-    await sendTxn(vault.setGov(await timeLock.getAddress()), "vault.setGov")
+
     await sendTxn(shortsTracker.setHandler(shortsHandler, true), "shortsTracker.setHandler");
     await sendTxn(shortsTracker.setHandler(positionRouterAddr, true), "shortsTracker.setHandler");
+    await sendTxn(shortsTracker.setHandler(config.POSITION_UTILS, true), "shortsTracker.setHandler");
+    await sendTxn(shortsTracker.setHandler(config.EXECUTE_INCREASE_ADMIN, true), "shortsTracker.setHandler");
+    await sendTxn(shortsTracker.setHandler(config.EXECUTE_DECREASE_ADMIN, true), "shortsTracker.setHandler");
+
+    await sendTxn(vault.setGov(await timeLock.getAddress()), "vault.setGov")
+
 
 }
 
