@@ -112,11 +112,9 @@ async function main() {
 
     const vaultErrorController = await deployContract("VaultErrorController", deploymentState);
 
-    const setErrorController = await vault.setErrorController(await vaultErrorController.getAddress());
-    await setErrorController.wait();
 
-    const setErrors = await vaultErrorController.setErrors(await vault.getAddress(), config.ERRORS);
-    await setErrors.wait();
+    await sendTxn(vault.setErrorController(await vaultErrorController.getAddress()), "vault setErrorController");
+    await sendTxn(vaultErrorController.setErrors(await vault.getAddress(), config.ERRORS), "vaultErrorController setErrors");
 
     const vaultUtils = await deployContract("VaultUtils", deploymentState, [await vault.getAddress()]);
 

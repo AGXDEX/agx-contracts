@@ -71,6 +71,17 @@ async function main() {
         [1, 2, 3, 4, 5]
     ), "yieldEmission notify");
 
+
+    const yieldEmissionArtifact = await deployer.loadArtifact("YieldEmission");
+
+    const yieldEmission = new Contract(
+        ContractAddresses.YieldEmission.address,
+        yieldEmissionArtifact.abi,
+        getWallet()
+    )
+    await sendTxn(yieldEmission.setStakeAgxContract(await stakeAGX.getAddress()), "yieldEmission setStakeAgxContract");
+
+
     saveDeployment(deploymentState);
 
 
