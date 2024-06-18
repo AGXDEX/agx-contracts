@@ -31,11 +31,12 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     mapping(address => uint256) private storedPendingReward;
     uint256 public totalClaim;
     IStakeAGX public stakeAgx;
+
     event ClaimReward(address account, address receiver, uint256 amount);
     event FetchReward(uint256 week, uint256 amount);
     event UpdateAccountReward(address account, uint256 rewardIntergralFor);
     event UpdateRewardIntegral(uint256 intergral);
-    event RewardLock(address user, uint256 amount, uint256 period);
+
 
 
     function initialize(address _yieldToken, address _rewardToken) external initializer {
@@ -131,22 +132,21 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         uint256 amount = storedPendingReward[_account];
         if (amount > 0) storedPendingReward[_account] = 0;
         uint256 daySeconds = 86400;
-        uint256 claimReward = 0;
-        uint256 lockReward = 0;
+        uint256 claimReward;
         if (period == 360 * daySeconds) {
-            lockReward= amount;
     // Stake for 360 days and get full rewards
+           claimReward = amount;
            stakeAgx.stake(_account, amount, period);
         } else if (period == 180 * daySeconds) {
             // Stake for 180 days and get 50% rewards
             uint256 halfReward = amount.div(2);
-             lockReward= halfReward;
+            claimReward = halfReward;
             stakeAgx.stake(_account, halfReward, period);
             stakeAgx.sendExcessRewards(halfReward);
         } else if (period == 90 * daySeconds) {
             // Stake for 90 days and get 25% rewards
             uint256 quarterReward = amount.div(4);
-            lockReward= quarterReward;
+            claimReward = quarterReward;
             stakeAgx.stake(_account, quarterReward, period);
             stakeAgx.sendExcessRewards(amount.sub(quarterReward));
         } else if (period == 0) {
@@ -154,13 +154,12 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
             uint256 tenPercentReward = amount.div(10);
             claimReward = tenPercentReward;
             rewardToken.safeTransfer(_account, tenPercentReward);
-            stakeAgx.sendExcessRewards(amount.sub(tenPercentReward));
-            totalClaim = totalClaim.add(tenPercentReward);
+            stakeAgx.sendExcessRewards(amount.sub(tenPercentReward));      
          } else {
             revert("Invalid period");
         }
+        totalClaim = totalClaim.add(claimReward);
         emit ClaimReward(msg.sender, msg.sender, claimReward);
-        emit RewardLock(msg.sender, lockReward, period);
         return amount;
     }
 
