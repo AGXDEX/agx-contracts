@@ -90,6 +90,8 @@ async function main() {
         await setFundingRate.wait();
     }
 
+    const setLiquidator = await vault.setLiquidator(config.LIQUIDATOR, true);
+    await setLiquidator.wait();
 
     const setInManagerMode = await vault.setInManagerMode(true);
     await setInManagerMode.wait();
