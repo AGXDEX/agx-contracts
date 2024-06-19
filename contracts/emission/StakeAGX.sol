@@ -42,8 +42,6 @@ contract StakeAGX is OwnableUpgradeable {
     uint256 public totalStakedWithMultiplier;
     uint256 public totalStakedWithoutMultiplier;
     mapping(address => uint256) public userTotalStakedWithoutMultiplier;
-    address public yieldEmission;
-    address public v3Staker;
 
 
     event ClaimReward(address account, address receiver, uint256 amount);
