@@ -88,23 +88,20 @@ contract StakeAGX is OwnableUpgradeable {
 
     function stake(address account, uint256 _amount,  uint256 period) public {
         agx.safeTransferFrom(msg.sender, address (this), _amount);
-        uint256 id = ++stakeIDNext;
-        _stake(account, id, _amount, period);
-
-        emit Staked(msg.sender, account,  id, _amount, period);
+        _stake(account, _amount, period);
     }
 
     function _stake(
         address account,
-        uint256 _id,
         uint256 _amount,
         uint256 _period
     ) private {
+        uint256 id = ++stakeIDNext;
         uint256 multiplier = lockupRewardMultipliers[_period];
         require(multiplier != 0, "invalid lock up period");
 
         updateRewards(account);
-        stakeInfos[account][_id] = StakeInfo({
+        stakeInfos[account][id] = StakeInfo({
             amount: _amount,
             lockupStartTime: block.timestamp,
             multiplier: multiplier,
@@ -115,6 +112,7 @@ contract StakeAGX is OwnableUpgradeable {
         userTotalStakedWithoutMultiplier[account] = userTotalStakedWithoutMultiplier[account].add(_amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.add(amountWithMultiplier);
         totalStakedWithoutMultiplier = totalStakedWithoutMultiplier.add(_amount);
+        emit Staked(msg.sender, account,  id, _amount, _period);
     }
 
     function _unstake(
@@ -184,8 +182,13 @@ contract StakeAGX is OwnableUpgradeable {
     }
 
     function sendExcessRewards(uint256 excessRewards) public {
-        uint256 integral = _updateRewardIntegral();
+        _sendExcessRewards(excessRewards);
         rewardToken.transferFrom(msg.sender, address(this), excessRewards);
+
+    }
+
+    function _sendExcessRewards(uint256 excessRewards) private{
+        uint256 integral = _updateRewardIntegral();
         uint256 durationToPeriodFinish = periodFinish - block.timestamp;
         if (excessRewards > 0) {
             uint256 excessRewardRate = excessRewards.div(durationToPeriodFinish);
@@ -213,25 +216,25 @@ contract StakeAGX is OwnableUpgradeable {
         if (period == 360 * daySeconds) {
             claimReward = amount;
            // Stake for 360 days and get full rewards
-           stake(msg.sender, amount, period);
+           _stake(msg.sender, amount, period);
         } else if (period == 180 * daySeconds) {
             // Stake for 180 days and get 50% rewards
             uint256 halfReward = amount.div(2);
             claimReward = halfReward;
-            stake(msg.sender, halfReward, period);
-            sendExcessRewards(halfReward);
+            _stake(msg.sender, halfReward, period);
+            _sendExcessRewards(halfReward);
         } else if (period == 90 * daySeconds) {
             // Stake for 90 days and get 25% rewards
             uint256 quarterReward = amount.div(4);
             claimReward = quarterReward;
-            stake(msg.sender, quarterReward, period);
-            sendExcessRewards(amount.sub(quarterReward));
+            _stake(msg.sender, quarterReward, period);
+            _sendExcessRewards(amount.sub(quarterReward));
         } else if (period == 0) {
             // Direct claim and get 10% tokens
             uint256 tenPercentReward = amount.div(10);
             claimReward = tenPercentReward;
             rewardToken.safeTransfer(msg.sender, tenPercentReward);
-            sendExcessRewards(amount.sub(tenPercentReward));
+            _sendExcessRewards(amount.sub(tenPercentReward));
         } else {
             revert("Invalid period");
         }
