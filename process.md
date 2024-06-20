@@ -6,8 +6,8 @@
 4.change deployment json
 2.yarn hardhat run deploy/deploy.ts
 3.yarn hardhat run deploy/configToken.ts
-4.yarn hardhat run deploy/staker/createIncentive.ts
 4.yarn hardhat run deploy/stakeAGX/deployStakeAGX.ts
+4.yarn hardhat run deploy/staker/createIncentive.ts
 5.yarn hardhat run deploy/deployPositionRouter.ts
 5.git add . 
 6.git commit -m "update" 
