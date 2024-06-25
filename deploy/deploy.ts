@@ -211,10 +211,18 @@ async function main() {
     await sendTxn(yieldEmission.notify(), "yieldEmission notify");
 
 
+    const alpRewardTracker = await deployContract("WETHEmission", deploymentState, [], "ALP_WETH_Emission");
+    const alpRewardDistributor = await deployContract("RewardDistributor",deploymentState,[config.WETH, await alpRewardTracker.getAddress()], "ALP_RewardDistributor");
+
+    await sendTxn(alpRewardTracker.setDistributor(await alpRewardDistributor.getAddress()), "alp reward tracker set distributor");
+    await sendTxn(glp.setWETHEmission(await alpRewardTracker.getAddress()), "alp set weth emission");
 
 
+    await sendTxn(alpRewardDistributor.updateLastDistributionTime(), "alp reward distributor update last time");
 
+    await sendTxn(alpRewardDistributor.setTokensPerInterval(0), "alp reward distributor set token per interval");
 
+    await sendTxn(alpRewardTracker.setHandler(await glp.getAddress(), true), "alp reward emission set handler");
 
     const reader = await  deployContract("Reader", deploymentState);
     const vaultReader = await  deployContract("VaultReader", deploymentState);

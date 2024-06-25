@@ -6,6 +6,7 @@ import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
 import "../libraries/token/IERC20.sol";
 import "../libraries/token/SafeERC20.sol";
 import "./interfaces/IEmissionSchedule.sol";
+import "./interfaces/IWETHEmission.sol";
 
 contract StakeAGX is OwnableUpgradeable {
     using SafeERC20 for IERC20;
@@ -20,7 +21,6 @@ contract StakeAGX is OwnableUpgradeable {
     IERC20 public agx;
     IERC20 public rewardToken;
     IEmissionSchedule public emissionSchedule;
-
     uint256 public startTime;
     bool public notified;
     mapping(address => uint256) public rewardIntegralFor;
@@ -42,6 +42,7 @@ contract StakeAGX is OwnableUpgradeable {
     uint256 public totalStakedWithMultiplier;
     uint256 public totalStakedWithoutMultiplier;
     mapping(address => uint256) public userTotalStakedWithoutMultiplier;
+    IWETHEmission public wethEmission;
 
 
     event ClaimReward(address account, address receiver, uint256 amount);
@@ -53,10 +54,11 @@ contract StakeAGX is OwnableUpgradeable {
     event AddExcessReward(address indexed sender,  uint256 amount);
 
 
-    function initialize(address _agx, address _rewardToken) external initializer {
+    function initialize(address _agx, address _rewardToken, address _wethEmission) external initializer {
         __Ownable_init_unchained();
         agx = IERC20(_agx);
         rewardToken = IERC20(_rewardToken);
+        wethEmission = IWETHEmission(_wethEmission);
     }
 
     function notify() public onlyOwner{
@@ -88,6 +90,7 @@ contract StakeAGX is OwnableUpgradeable {
 
     function stake(address account, uint256 _amount,  uint256 period) public {
         agx.safeTransferFrom(msg.sender, address (this), _amount);
+
         _stake(account, _amount, period);
     }
 
@@ -100,14 +103,17 @@ contract StakeAGX is OwnableUpgradeable {
         uint256 multiplier = lockupRewardMultipliers[_period];
         require(multiplier != 0, "invalid lock up period");
 
+        uint256 amountWithMultiplier =  _amount.mul(multiplier);
+        wethEmission.stake(account, amountWithMultiplier);
         updateRewards(account);
+
         stakeInfos[account][id] = StakeInfo({
             amount: _amount,
             lockupStartTime: block.timestamp,
             multiplier: multiplier,
             period: _period
         });
-        uint256 amountWithMultiplier =  _amount.mul(multiplier);
+
         userTotalStakedWithMultiplier[account] = userTotalStakedWithMultiplier[account].add(amountWithMultiplier);
         userTotalStakedWithoutMultiplier[account] = userTotalStakedWithoutMultiplier[account].add(_amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.add(amountWithMultiplier);
@@ -119,11 +125,13 @@ contract StakeAGX is OwnableUpgradeable {
         uint256 _id
     ) private returns(uint256 amount){
         updateRewards(msg.sender);
+
         StakeInfo memory stakeInfo = stakeInfos[msg.sender][_id];
         amount = stakeInfo.amount;  
         require(stakeInfo.lockupStartTime > 0, "invalid id");
         require(stakeInfo.lockupStartTime + stakeInfo.period <= block.timestamp, "can not unstake now");
         uint256 amountWithMultiplier =  stakeInfo.amount.mul(stakeInfo.multiplier);
+        wethEmission.unstake(msg.sender, amountWithMultiplier);
         userTotalStakedWithMultiplier[msg.sender] = userTotalStakedWithMultiplier[msg.sender].sub(amountWithMultiplier);
         userTotalStakedWithoutMultiplier[msg.sender] = userTotalStakedWithoutMultiplier[msg.sender].sub(amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.sub(amountWithMultiplier);
