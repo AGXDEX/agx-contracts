@@ -21,12 +21,20 @@ contract RewardDistributor is IRewardDistributor, ReentrancyGuard, Governable {
     address public rewardTracker;
 
     address public admin;
+    mapping (address => bool) public isKeeper;
+
 
     event Distribute(uint256 amount);
     event TokensPerIntervalChange(uint256 amount);
 
     modifier onlyAdmin() {
         require(msg.sender == admin, "RewardDistributor: forbidden");
+        _;
+    }
+
+
+    modifier onlyKeeperAndAbove() {
+        require(msg.sender == admin || isKeeper[msg.sender], "forbidden");
         _;
     }
 
@@ -40,16 +48,21 @@ contract RewardDistributor is IRewardDistributor, ReentrancyGuard, Governable {
         admin = _admin;
     }
 
+    function setKeeper(address _keeper, bool _isActive) external onlyAdmin {
+        isKeeper[_keeper] = _isActive;
+    }
+
+
     // to help users who accidentally send their tokens to this contract
     function withdrawToken(address _token, address _account, uint256 _amount) external onlyGov {
         IERC20(_token).safeTransfer(_account, _amount);
     }
 
-    function updateLastDistributionTime() external onlyAdmin {
+    function updateLastDistributionTime() external onlyKeeperAndAbove {
         lastDistributionTime = block.timestamp;
     }
 
-    function setTokensPerInterval(uint256 _amount) external onlyAdmin {
+    function setTokensPerInterval(uint256 _amount) external onlyKeeperAndAbove {
         require(lastDistributionTime != 0, "RewardDistributor: invalid lastDistributionTime");
         IRewardTracker(rewardTracker).updateRewards();
         tokensPerInterval = _amount;
