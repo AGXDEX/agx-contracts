@@ -39,7 +39,7 @@ async function main() {
     await sendTxn(stakeRewardDistributor.updateLastDistributionTime(), "stake reward distributor update last time");
 
     await sendTxn(stakeRewardDistributor.setTokensPerInterval(0), "stake reward distributor set token per interval");
-    await sendTxn(stakeRewardDistributor.setKeeper(config.FEE_ADMIN), "stake reward distributor set token per interval");
+    await sendTxn(stakeRewardDistributor.setKeeper(config.FEE_ADMIN, true), "stake reward distributor set token per interval");
 
 
 

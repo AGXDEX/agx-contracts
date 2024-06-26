@@ -75,6 +75,7 @@ async function main() {
   await sendTxn(positionRouter.setCallbackGasLimit("2200000"), "positionRouter.setCallbackGasLimit")
 
 
+    await sendTxn(timeLock.setKeeper(config.FEE_ADMIN, true),"time lock set keeper");
 
  const fastPriceEvents = await deployContract("FastPriceEvents", deploymentState, []);
   const secondaryPriceFeed = await deployContract("FastPriceFeed", deploymentState, [

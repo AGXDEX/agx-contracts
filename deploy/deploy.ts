@@ -221,12 +221,13 @@ async function main() {
     await sendTxn(alpRewardDistributor.updateLastDistributionTime(), "alp reward distributor update last time");
 
     await sendTxn(alpRewardDistributor.setTokensPerInterval(0), "alp reward distributor set token per interval");
-    await sendTxn(alpRewardDistributor.setKeeper(config.FEE_ADMIN), "alp reward distributor set keeper");
+    await sendTxn(alpRewardDistributor.setKeeper(config.FEE_ADMIN, true), "alp reward distributor set keeper");
 
     await sendTxn(alpRewardTracker.setHandler(await glp.getAddress(), true), "alp reward emission set handler");
 
     const reader = await  deployContract("Reader", deploymentState);
     const vaultReader = await  deployContract("VaultReader", deploymentState);
+
 
 
 
