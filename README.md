@@ -1,51 +1,53 @@
-# zkSync Hardhat project template
+## Prerequisite
+- have deployed positionUtils, config in hardhat.config and  config/index.ts
+    ```
+  //hardhat config.ts
+     zksolc: {
+    version: '1.3.13',
+    settings: {
+      // find all available options in the official documentation
+      // https://era.zksync.io/docs/tools/hardhat/hardhat-zksync-solc.html#configuration
+        libraries: {
+              "contracts/core/PositionUtils.sol": {
+                "PositionUtils": "0x9F8809Ce384aB7C14105CD8B12FD9c086F2b9196"
+              }
+            }
+    },
+  }
+  
+  //config/index.ts
+  export const POSITION_UTILS = "0x1842614D09d6EA4Ca9E57AF69355AaE26745Ba9d"
+  ```
+- have deployed uni staker and config in DeploymentOutput.json
+- have complete pricefeed.json config
 
-This project was scaffolded with [zksync-cli](https://github.com/matter-labs/zksync-cli).
+## Set config value
+- prepare for 6 wallets
+    - Deployer
+    - EXECUTE_INCREASE_ADMIN
+    - EXECUTE_DECREASE_ADMIN
+    - FEED_ADMIN
+    - LIQUIDATOR
+    - FEE_ADMIN
+- add .env file, set deployer private key
+-  update admin address in config/index.ts
+   (`It should be noted that these accounts need to have enough eth to pay gas`)
+    - EXECUTE_INCREASE_ADMIN
+    - EXECUTE_DECREASE_ADMIN
+    - FEED_ADMIN
+    - LIQUIDATOR
+    - FEE_ADMIN
 
-## Project Layout
+## Deploy Contracts
+- yarn install
+- yarn hardhat run deploy/deploy.ts
+- yarn hardhat run deploy/configToken.ts
+- yarn hardhat run deploy/stakeAGX/deployStakeAGX.ts
+- yarn hardhat run deploy/staker/createIncentive.ts
+- yarn hardhat run deploy/deployPositionRouter.ts
 
-- `/contracts`: Contains solidity smart contracts.
-- `/deploy`: Scripts for contract deployment and interaction.
-- `/test`: Test files.
-- `hardhat.config.ts`: Configuration settings.
-
-## How to Use
-
-- `npm run compile`: Compiles contracts.
-- `npm run deploy`: Deploys using script `/deploy/deploy.ts`.
-- `npm run interact`: Interacts with the deployed contract using `/deploy/interact.ts`.
-- `npm run test`: Tests the contracts.
-
-Note: Both `npm run deploy` and `npm run interact` are set in the `package.json`. You can also run your files directly, for example: `npx hardhat deploy-zksync --script deploy.ts`
-
-### Environment Settings
-
-To keep private keys safe, this project pulls in environment variables from `.env` files. Primarily, it fetches the wallet's private key.
-
-Rename `.env.example` to `.env` and fill in your private key:
-
-```
-WALLET_PRIVATE_KEY=your_private_key_here...
-```
-
-### Network Support
-
-`hardhat.config.ts` comes with a list of networks to deploy and test contracts. Add more by adjusting the `networks` section in the `hardhat.config.ts`. To make a network the default, set the `defaultNetwork` to its name. You can also override the default using the `--network` option, like: `hardhat test --network dockerizedNode`.
-
-### Local Tests
-
-Running `npm run test` by default runs the [zkSync In-memory Node](https://era.zksync.io/docs/tools/testing/era-test-node.html) provided by the [@matterlabs/hardhat-zksync-node](https://era.zksync.io/docs/tools/hardhat/hardhat-zksync-node.html) tool.
-
-Important: zkSync In-memory Node currently supports only the L2 node. If contracts also need L1, use another testing environment like Dockerized Node. Refer to [test documentation](https://era.zksync.io/docs/tools/testing/) for details.
-
-## Useful Links
-
-- [Docs](https://era.zksync.io/docs/dev/)
-- [Official Site](https://zksync.io/)
-- [GitHub](https://github.com/matter-labs)
-- [Twitter](https://twitter.com/zksync)
-- [Discord](https://join.zksync.dev/)
-
-## License
-
-This project is under the [MIT](./LICENSE) license.
+## Deploy Graph
+https://github.com/AGXDEX/agx-graph
+- gmx-arbitrum-raw
+- gmx-liquidate-stat
+- uniswap-v3-staker-subgraph
