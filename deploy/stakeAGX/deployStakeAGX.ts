@@ -20,6 +20,7 @@ async function main() {
 
     const agxArtifact = await deployer.loadArtifact("AGX");
 
+
     const agx = new Contract(
         ContractAddresses.AGX.address,
         agxArtifact.abi,
@@ -28,11 +29,26 @@ async function main() {
 
     const stakeAGXArtifact = await deployer.loadArtifact("StakeAGX");
 
+
+    const stakeRewardTracker = await deployContract("WETHEmission", deploymentState, [], "Stake_WETH_Emission");
+    const stakeRewardDistributor = await deployContract("RewardDistributor",deploymentState,[config.WETH, await stakeRewardTracker.getAddress()], "Stake_RewardDistributor");
+
+    await sendTxn(stakeRewardTracker.setDistributor(await stakeRewardDistributor.getAddress()), "stake reward tracker set distributor");
+
+
+    await sendTxn(stakeRewardDistributor.updateLastDistributionTime(), "stake reward distributor update last time");
+
+    await sendTxn(stakeRewardDistributor.setTokensPerInterval(0), "stake reward distributor set token per interval");
+    await sendTxn(stakeRewardDistributor.setKeeper(config.FEE_ADMIN, true), "stake reward distributor set token per interval");
+
+
+
     const stakeAGX = await hre.zkUpgrades.deployProxy(
         deployer.zkWallet,
         stakeAGXArtifact,
-        [ContractAddresses.AGX.address, ContractAddresses.AGX.address], { initializer: "initialize" });
+        [ContractAddresses.AGX.address, ContractAddresses.AGX.address, await stakeRewardTracker.getAddress()], { initializer: "initialize" });
 
+    await sendTxn(stakeRewardTracker.setHandler(await stakeAGX.getAddress(), true), "stake reward emission set handler");
 
     deploymentState["StakeAGX"] = {
         "name": "StakeAGX",
@@ -71,7 +87,19 @@ async function main() {
         [1, 2, 3, 4, 5]
     ), "yieldEmission notify");
 
+
+    const yieldEmissionArtifact = await deployer.loadArtifact("YieldEmission");
+
+    const yieldEmission = new Contract(
+        ContractAddresses.YieldEmission.address,
+        yieldEmissionArtifact.abi,
+        getWallet()
+    )
+    await sendTxn(yieldEmission.setStakeAgxContract(await stakeAGX.getAddress()), "yieldEmission setStakeAgxContract");
+
+
     saveDeployment(deploymentState);
+
 
 
 

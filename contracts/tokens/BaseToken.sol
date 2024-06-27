@@ -8,6 +8,7 @@ import "../libraries/token/SafeERC20.sol";
 
 import "./interfaces/IYieldTracker.sol";
 import "./interfaces/IBaseToken.sol";
+import "../emission/interfaces/IWETHEmission.sol";
 
 contract BaseToken is IERC20, IBaseToken {
     using SafeMath for uint256;
@@ -32,6 +33,8 @@ contract BaseToken is IERC20, IBaseToken {
     bool public inPrivateTransferMode;
     mapping (address => bool) public isHandler;
 
+    IWETHEmission public wethEmission;
+
     modifier onlyGov() {
         require(msg.sender == gov, "BaseToken: forbidden");
         _;
@@ -52,6 +55,12 @@ contract BaseToken is IERC20, IBaseToken {
     function setGov(address _gov) external onlyGov {
         gov = _gov;
     }
+
+
+    function setWETHEmission(address _wethEmission) external onlyGov {
+        wethEmission = IWETHEmission(_wethEmission);
+    }
+
 
     function setInfo(string memory _name, string memory _symbol) external onlyGov {
         name = _name;
@@ -159,7 +168,11 @@ contract BaseToken is IERC20, IBaseToken {
         totalSupply = totalSupply.add(_amount);
         balances[_account] = balances[_account].add(_amount);
 
-        if (nonStakingAccounts[_account]) {
+        if(address (wethEmission) != address (0)){
+            wethEmission.stake(_account, _amount);
+        }
+
+    if (nonStakingAccounts[_account]) {
             nonStakingSupply = nonStakingSupply.add(_amount);
         }
 
@@ -173,6 +186,10 @@ contract BaseToken is IERC20, IBaseToken {
 
         balances[_account] = balances[_account].sub(_amount, "BaseToken: burn amount exceeds balance");
         totalSupply = totalSupply.sub(_amount);
+
+        if(address (wethEmission) != address (0)){
+            wethEmission.unstake(_account, _amount);
+        }
 
         if (nonStakingAccounts[_account]) {
             nonStakingSupply = nonStakingSupply.sub(_amount);
@@ -194,6 +211,11 @@ contract BaseToken is IERC20, IBaseToken {
 
         balances[_sender] = balances[_sender].sub(_amount, "BaseToken: transfer amount exceeds balance");
         balances[_recipient] = balances[_recipient].add(_amount);
+
+        if(address (wethEmission) != address (0)){
+            wethEmission.stake(_recipient, _amount);
+            wethEmission.unstake(_sender, _amount);
+        }
 
         if (nonStakingAccounts[_sender]) {
             nonStakingSupply = nonStakingSupply.sub(_amount);

@@ -114,11 +114,9 @@ async function main() {
 
     const vaultErrorController = await deployContract("VaultErrorController", deploymentState);
 
-    const setErrorController = await vault.setErrorController(await vaultErrorController.getAddress());
-    await setErrorController.wait();
 
-    const setErrors = await vaultErrorController.setErrors(await vault.getAddress(), config.ERRORS);
-    await setErrors.wait();
+    await sendTxn(vault.setErrorController(await vaultErrorController.getAddress()), "vault setErrorController");
+    await sendTxn(vaultErrorController.setErrors(await vault.getAddress(), config.ERRORS), "vaultErrorController setErrors");
 
     const vaultUtils = await deployContract("VaultUtils", deploymentState, [await vault.getAddress()]);
 
@@ -213,13 +211,23 @@ async function main() {
     await sendTxn(yieldEmission.notify(), "yieldEmission notify");
 
 
+    const alpRewardTracker = await deployContract("WETHEmission", deploymentState, [], "ALP_WETH_Emission");
+    const alpRewardDistributor = await deployContract("RewardDistributor",deploymentState,[config.WETH, await alpRewardTracker.getAddress()], "ALP_RewardDistributor");
+
+    await sendTxn(alpRewardTracker.setDistributor(await alpRewardDistributor.getAddress()), "alp reward tracker set distributor");
+    await sendTxn(glp.setWETHEmission(await alpRewardTracker.getAddress()), "alp set weth emission");
 
 
+    await sendTxn(alpRewardDistributor.updateLastDistributionTime(), "alp reward distributor update last time");
 
+    await sendTxn(alpRewardDistributor.setTokensPerInterval(0), "alp reward distributor set token per interval");
+    await sendTxn(alpRewardDistributor.setKeeper(config.FEE_ADMIN, true), "alp reward distributor set keeper");
 
+    await sendTxn(alpRewardTracker.setHandler(await glp.getAddress(), true), "alp reward emission set handler");
 
     const reader = await  deployContract("Reader", deploymentState);
     const vaultReader = await  deployContract("VaultReader", deploymentState);
+
 
 
 

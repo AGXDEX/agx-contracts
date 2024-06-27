@@ -8,6 +8,8 @@ import "../tokens/interfaces/IYieldToken.sol";
 import "../libraries/token/IERC20.sol";
 import "../libraries/token/SafeERC20.sol";
 import "./interfaces/IEmissionSchedule.sol";
+import "./interfaces/IStakeAGX.sol";
+
 
 contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     using SafeERC20 for IERC20;
@@ -28,6 +30,8 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
     mapping(address => uint256) public rewardIntegralFor;
     mapping(address => uint256) private storedPendingReward;
     uint256 public totalClaim;
+    IStakeAGX public stakeAgx;
+
     event ClaimReward(address account, address receiver, uint256 amount);
     event FetchReward(uint256 week, uint256 amount);
     event UpdateAccountReward(address account, uint256 rewardIntergralFor);
@@ -52,6 +56,10 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
         emit FetchReward(1, amount);
     }
 
+    function setStakeAgxContract(address _stakeAgx) external onlyOwner {
+        stakeAgx = IStakeAGX(_stakeAgx);
+        rewardToken.approve(address(stakeAgx), type(uint256).max);
+    }
 
     function setEmissionSchedule(address _emissionSchedule)  public onlyOwner{
         emissionSchedule = IEmissionSchedule(_emissionSchedule);
@@ -113,16 +121,49 @@ contract YieldEmission is IYieldTracker, OwnableUpgradeable {
 
     }
 
-    function claim(address _account, address _receiver) external override returns (uint256) {
-        require(msg.sender == address (yieldToken), "YieldTracker: forbidden");
+    function claim(address _account, address _receiver) external override returns (uint256){
+        return 0;
+    }
+
+
+    function claimWithPeriod(uint256 period) external  returns (uint256) {
+        address _account = msg.sender;
         updateRewards(_account);
         uint256 amount = storedPendingReward[_account];
         if (amount > 0) storedPendingReward[_account] = 0;
-        totalClaim = totalClaim.add(amount);
-        rewardToken.safeTransfer(_receiver, amount);
-        emit ClaimReward(_account, _receiver, amount);
+        uint256 daySeconds = 86400;
+        uint256 claimReward;
+        if (period == 360 * daySeconds) {
+    // Stake for 360 days and get full rewards
+           claimReward = amount;
+           stakeAgx.stake(_account, amount, period);
+        } else if (period == 180 * daySeconds) {
+            // Stake for 180 days and get 50% rewards
+            uint256 halfReward = amount.div(2);
+            claimReward = halfReward;
+            stakeAgx.stake(_account, halfReward, period);
+            stakeAgx.sendExcessRewards(halfReward);
+        } else if (period == 90 * daySeconds) {
+            // Stake for 90 days and get 25% rewards
+            uint256 quarterReward = amount.div(4);
+            claimReward = quarterReward;
+            stakeAgx.stake(_account, quarterReward, period);
+            stakeAgx.sendExcessRewards(amount.sub(quarterReward));
+        } else if (period == 0) {
+            // Direct claim and get 10% tokens
+            uint256 tenPercentReward = amount.div(10);
+            claimReward = tenPercentReward;
+            rewardToken.safeTransfer(_account, tenPercentReward);
+            stakeAgx.sendExcessRewards(amount.sub(tenPercentReward));      
+         } else {
+            revert("Invalid period");
+        }
+        totalClaim = totalClaim.add(claimReward);
+        emit ClaimReward(msg.sender, msg.sender, claimReward);
         return amount;
     }
+
+  
 
     function getTokensPerInterval() external override view returns (uint256){
         return 0;

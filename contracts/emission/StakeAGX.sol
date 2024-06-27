@@ -6,6 +6,7 @@ import "@openzeppelin/contracts-upgradeable/math/SafeMathUpgradeable.sol";
 import "../libraries/token/IERC20.sol";
 import "../libraries/token/SafeERC20.sol";
 import "./interfaces/IEmissionSchedule.sol";
+import "./interfaces/IWETHEmission.sol";
 
 contract StakeAGX is OwnableUpgradeable {
     using SafeERC20 for IERC20;
@@ -20,7 +21,6 @@ contract StakeAGX is OwnableUpgradeable {
     IERC20 public agx;
     IERC20 public rewardToken;
     IEmissionSchedule public emissionSchedule;
-
     uint256 public startTime;
     bool public notified;
     mapping(address => uint256) public rewardIntegralFor;
@@ -42,23 +42,23 @@ contract StakeAGX is OwnableUpgradeable {
     uint256 public totalStakedWithMultiplier;
     uint256 public totalStakedWithoutMultiplier;
     mapping(address => uint256) public userTotalStakedWithoutMultiplier;
-
-
-
+    IWETHEmission public wethEmission;
 
 
     event ClaimReward(address account, address receiver, uint256 amount);
     event FetchReward(uint256 week, uint256 amount);
     event UpdateAccountReward(address account, uint256 rewardIntergralFor);
     event UpdateRewardIntegral(uint256 intergral);
-    event Staked(address indexed sender, uint256 indexed id, uint256 amount, uint256 period );
+    event Staked(address indexed sender, address receiver, uint256 indexed id, uint256 amount, uint256 period );
     event UnStake(address indexed sender, uint256 indexed id, uint256 amount );
+    event AddExcessReward(address indexed sender,  uint256 amount);
 
 
-    function initialize(address _agx, address _rewardToken) external initializer {
+    function initialize(address _agx, address _rewardToken, address _wethEmission) external initializer {
         __Ownable_init_unchained();
         agx = IERC20(_agx);
         rewardToken = IERC20(_rewardToken);
+        wethEmission = IWETHEmission(_wethEmission);
     }
 
     function notify() public onlyOwner{
@@ -88,46 +88,50 @@ contract StakeAGX is OwnableUpgradeable {
         }
     }
 
-    function stake(uint256 _amount, uint256 period) external {
+    function stake(address account, uint256 _amount,  uint256 period) public {
         agx.safeTransferFrom(msg.sender, address (this), _amount);
-        uint256 id = ++stakeIDNext;
-        _stake( id, _amount, period);
 
-        emit Staked(msg.sender,  id, _amount, period);
+        _stake(account, _amount, period);
     }
 
     function _stake(
-        uint256 _id,
+        address account,
         uint256 _amount,
         uint256 _period
     ) private {
+        uint256 id = ++stakeIDNext;
         uint256 multiplier = lockupRewardMultipliers[_period];
         require(multiplier != 0, "invalid lock up period");
 
-        updateRewards(msg.sender);
+        uint256 amountWithMultiplier =  _amount.mul(multiplier);
+        wethEmission.stake(account, amountWithMultiplier);
+        updateRewards(account);
 
-        stakeInfos[msg.sender][_id] = StakeInfo({
+        stakeInfos[account][id] = StakeInfo({
             amount: _amount,
             lockupStartTime: block.timestamp,
             multiplier: multiplier,
             period: _period
         });
-        uint256 amountWithMultiplier =  _amount.mul(multiplier);
-        userTotalStakedWithMultiplier[msg.sender] = userTotalStakedWithMultiplier[msg.sender].add(amountWithMultiplier);
-        userTotalStakedWithoutMultiplier[msg.sender] = userTotalStakedWithoutMultiplier[msg.sender].add(_amount);
+
+        userTotalStakedWithMultiplier[account] = userTotalStakedWithMultiplier[account].add(amountWithMultiplier);
+        userTotalStakedWithoutMultiplier[account] = userTotalStakedWithoutMultiplier[account].add(_amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.add(amountWithMultiplier);
         totalStakedWithoutMultiplier = totalStakedWithoutMultiplier.add(_amount);
+        emit Staked(msg.sender, account,  id, _amount, _period);
     }
 
     function _unstake(
         uint256 _id
     ) private returns(uint256 amount){
         updateRewards(msg.sender);
+
         StakeInfo memory stakeInfo = stakeInfos[msg.sender][_id];
-        amount = stakeInfo.amount;
+        amount = stakeInfo.amount;  
         require(stakeInfo.lockupStartTime > 0, "invalid id");
         require(stakeInfo.lockupStartTime + stakeInfo.period <= block.timestamp, "can not unstake now");
         uint256 amountWithMultiplier =  stakeInfo.amount.mul(stakeInfo.multiplier);
+        wethEmission.unstake(msg.sender, amountWithMultiplier);
         userTotalStakedWithMultiplier[msg.sender] = userTotalStakedWithMultiplier[msg.sender].sub(amountWithMultiplier);
         userTotalStakedWithoutMultiplier[msg.sender] = userTotalStakedWithoutMultiplier[msg.sender].sub(amount);
         totalStakedWithMultiplier = totalStakedWithMultiplier.sub(amountWithMultiplier);
@@ -185,6 +189,21 @@ contract StakeAGX is OwnableUpgradeable {
         emit FetchReward(currentWeek, amount);
     }
 
+    function sendExcessRewards(uint256 excessRewards) public {
+        _sendExcessRewards(excessRewards);
+        rewardToken.transferFrom(msg.sender, address(this), excessRewards);
+
+    }
+
+    function _sendExcessRewards(uint256 excessRewards) private{
+        uint256 integral = _updateRewardIntegral();
+        uint256 durationToPeriodFinish = periodFinish - block.timestamp;
+        if (excessRewards > 0) {
+            uint256 excessRewardRate = excessRewards.div(durationToPeriodFinish);
+            rewardRate = uint128(excessRewardRate) + rewardRate;
+        }
+        emit AddExcessReward(msg.sender, excessRewards);
+    }
 
     function _updateIntegralForAccount(address account,  uint256 currentIntegral) internal {
         uint256 integralFor = rewardIntegralFor[account];
@@ -196,13 +215,41 @@ contract StakeAGX is OwnableUpgradeable {
         }
     }
 
-    function claim() external returns (uint256) {
+    function claim(uint256 period) external returns (uint256) {
         updateRewards(msg.sender);
         uint256 amount = storedPendingReward[msg.sender];
         if (amount > 0) storedPendingReward[msg.sender] = 0;
-        totalClaim = totalClaim.add(amount);
-        rewardToken.safeTransfer(msg.sender, amount);
-        emit ClaimReward(msg.sender, msg.sender, amount);
+        uint256 daySeconds = 86400;
+        uint256 claimReward;
+        if (period == 360 * daySeconds) {
+            claimReward = amount;
+           // Stake for 360 days and get full rewards
+           _stake(msg.sender, amount, period);
+        } else if (period == 180 * daySeconds) {
+            // Stake for 180 days and get 50% rewards
+            uint256 halfReward = amount.div(2);
+            claimReward = halfReward;
+            _stake(msg.sender, halfReward, period);
+            _sendExcessRewards(halfReward);
+        } else if (period == 90 * daySeconds) {
+            // Stake for 90 days and get 25% rewards
+            uint256 quarterReward = amount.div(4);
+            claimReward = quarterReward;
+            _stake(msg.sender, quarterReward, period);
+            _sendExcessRewards(amount.sub(quarterReward));
+        } else if (period == 0) {
+            // Direct claim and get 10% tokens
+            uint256 tenPercentReward = amount.div(10);
+            claimReward = tenPercentReward;
+            rewardToken.safeTransfer(msg.sender, tenPercentReward);
+            _sendExcessRewards(amount.sub(tenPercentReward));
+        } else {
+            revert("Invalid period");
+        }
+        totalClaim = totalClaim.add(claimReward);
+        emit ClaimReward(msg.sender, msg.sender, claimReward);
+
+       
         return amount;
     }
 

@@ -59,6 +59,10 @@ async function main() {
 
     console.log(createIncentive.hash);
 
+    const setStakeAGX = await v3Staker.setStakeAGX(ContractAddresses.StakeAGX.address, ContractAddresses.AGX.address);
+    await setStakeAGX.wait();
+
+
 
 
 

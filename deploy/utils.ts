@@ -108,19 +108,19 @@ export const testDeployContract = async (contractArtifactName: string, construct
   log(` - Contract address: ${address}`);
   log(` - Contract source: ${fullContractSource}`);
   log(` - Encoded constructor arguments: ${constructorArgs}\n`);
-  if (!options?.noVerify && hre.network.config.verifyURL) {
-    log(`Requesting contract verification...`);
-    await verifyContract({
-      address,
-      contract: fullContractSource,
-      constructorArguments: constructorArgs,
-      bytecode: artifact.bytecode,
-    });
-  }
+   if (!options?.noVerify && hre.network.config.verifyURL) {
+     log(`Requesting contract verification...`);
+     await verifyContract({
+       address,
+       contract: fullContractSource,
+       constructorArguments: constructorArgs,
+       bytecode: artifact.bytecode,
+     });
+   }
 
   return contract;
 }
-export const deployContract = async (contractArtifactName: string, deploymentState: any, constructorArguments?: any[], options?: DeployContractOptions) => {
+export const deployContract = async (contractArtifactName: string, deploymentState: any, constructorArguments?: any[], saveName?: string, options?: DeployContractOptions) => {
   if (deploymentState[contractArtifactName] != undefined) {
     console.log(contractArtifactName, "has already been deployed");
     const contractArtifact = await hre.artifacts.readArtifact(contractArtifactName);
@@ -165,10 +165,18 @@ export const deployContract = async (contractArtifactName: string, deploymentSta
   log(` - Contract address: ${address}`);
   log(` - Contract source: ${fullContractSource}`);
   log(` - Encoded constructor arguments: ${constructorArgs}\n`);
-  deploymentState[contractArtifactName] = {
-    name: contractArtifactName,
-    address: address
+  if(!!saveName){
+    deploymentState[saveName] = {
+      name: saveName,
+      address: address
+    }
+  }else{
+    deploymentState[contractArtifactName] = {
+      name: contractArtifactName,
+      address: address
+    }
   }
+
   saveDeployment(deploymentState);
   if (!options?.noVerify && hre.network.config.verifyURL) {
     log(`Requesting contract verification...`);
