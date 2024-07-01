@@ -61,6 +61,10 @@ contract StakeAGX is OwnableUpgradeable {
         wethEmission = IWETHEmission(_wethEmission);
     }
 
+    function setWETHEmission(address _wethEmission) public onlyOwner{
+        wethEmission = IWETHEmission(_wethEmission);
+    }
+
     function notify() public onlyOwner{
         require(!notified, "already notified");
         notified = true;
